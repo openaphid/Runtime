@@ -266,6 +266,16 @@ namespace Aphid {
 	  return true;
   }
 	
+	bool DirectorIOS::multipleTouchEnabled() const
+	{
+		return ((UIView*)(m_glView->impl())).multipleTouchEnabled;
+	}
+	
+	void DirectorIOS::setMultipleTouchEnabled(bool b)
+	{
+		[m_glView->impl() setMultipleTouchEnabled:(b ? YES : NO)];
+	}
+	
   void DirectorIOS::reshapeProjection(const Size& size)
   {
 		UNUSED_PARAM(size);

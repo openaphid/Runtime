@@ -35,6 +35,14 @@
 	@param fpsInterval, float
 	*/
 	void setAJDirectorFpsInterval(AJ::ExecState* exec, AJ::AJObject* thisObject, AJ::AJValue value);
+	/*
+	@return multipleTouchEnabled, bool
+	*/
+	AJ::AJValue ajDirectorMultipleTouchEnabled(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&);
+	/*
+	@param multipleTouchEnabled, bool
+	*/
+	void setAJDirectorMultipleTouchEnabled(AJ::ExecState* exec, AJ::AJObject* thisObject, AJ::AJValue value);
 	///-------------------------------------------------------------------------------------------------------------------
 	/*
 	@param p, Point

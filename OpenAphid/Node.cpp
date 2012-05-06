@@ -765,7 +765,7 @@ namespace Aphid {
 	
 	Node* Node::hitTest(const Point &p, Aphid::PlatformTouchEvent *event)
 	{
-		if (!visible() || !pointInside(p, event))
+		if (!isUserInteractionEnabled() || !visible() || !pointInside(p, event))
 			return 0;
 		
 		if (m_children) {

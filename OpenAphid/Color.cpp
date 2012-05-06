@@ -60,6 +60,11 @@ namespace Aphid {
 		return makeRGBA(r, g, b, colorFloatToByte(a));
 	}
 	
+	RGBA colorWithAlpha(RGBA color, int a)
+	{
+		return (color & 0x00FFFFFF) | (max(0, min(a, 255)) << 24);
+	}
+	
 	///-------------------------------------------------------------------------------------------------------------------
 	Color::Color(const AJ::UString& string)
 	{

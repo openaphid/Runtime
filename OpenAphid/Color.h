@@ -38,7 +38,7 @@ namespace Aphid {
 	
 	RGBA makeRGBA(int r, int g, int b, float a);
 	
-	RGBA colorWithAlpha(RGBA color, float alpha);
+	RGBA colorWithAlpha(RGBA color, int a);
 	
 	class WebColors : public Noncopyable {
 	public:
