@@ -193,6 +193,8 @@ namespace Aphid {
 		virtual void setContentScaleFactor(float scaleFactor) = 0;
 		virtual float contentScaleFactor() = 0;
 		virtual bool enableRetinaDisplay(bool on) = 0;
+		virtual bool multipleTouchEnabled() const = 0;
+		virtual void setMultipleTouchEnabled(bool b) = 0;
 
 		//Getters and setters
 		
@@ -341,6 +343,8 @@ namespace Aphid {
 		virtual Point convertToUI(const Point& p);
 		virtual Size winSize() const;
 		virtual Size winSizeInPixels() const;
+		virtual bool multipleTouchEnabled() const;
+		virtual void setMultipleTouchEnabled(bool b);
 		virtual void end();
 		virtual void startAnimation();
 		virtual void stopAnimation();

@@ -101,6 +101,21 @@ namespace Aphid {
 			OA_ERROR_INVALID_PROPERTY(exec, "contentScaleFactor", "float");
 	}
 	
+	AJ::AJValue ajDirectorMultipleTouchEnabled(AJ::ExecState*, AJ::AJValue thisValue, const AJ::Identifier&) 
+	{
+		AJDirector* jsDirector = ajoa_cast<AJDirector*>(asObject(thisValue));
+		return jsBoolean(jsDirector->impl()->multipleTouchEnabled());
+	}
+	
+	void setAJDirectorMultipleTouchEnabled(AJ::ExecState* exec, AJ::AJObject* thisObject, AJ::AJValue value) 
+	{
+		if (value.isBoolean()) {
+			AJDirector* jsThis = ajoa_cast<AJDirector*>(thisObject);
+			jsThis->impl()->setMultipleTouchEnabled(value.toBoolean(exec));
+		} else
+			OA_ERROR_INVALID_PROPERTY(exec, "multipleTouchEnabled", "bool");
+	}
+	
 	AJ::AJValue ajDirectorDisplayFPS(AJ::ExecState*, AJ::AJValue thisValue, const AJ::Identifier&) 
 	{
 		AJDirector* jsDirector = ajoa_cast<AJDirector*>(asObject(thisValue));

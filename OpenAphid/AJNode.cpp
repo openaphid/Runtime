@@ -411,6 +411,21 @@ namespace Aphid {
 			OA_ERROR_INVALID_PROPERTY(exec, "touchEnabled", "bool");
 	}
 	
+	AJ::AJValue ajNodeUserInteractionEnabled(AJ::ExecState*, AJ::AJValue thisValue, const AJ::Identifier&)
+	{
+		AJNode* ajNode = ajoa_cast<AJNode*>(asObject(thisValue));
+		return jsBoolean(ajNode->impl()->isUserInteractionEnabled());
+	}
+
+	void setAJNodeUserInteractionEnabled(AJ::ExecState* exec, AJ::AJObject* thisObject, AJ::AJValue value)
+	{
+		if (value.isBoolean()) {
+			AJNode* jsThis = ajoa_cast<AJNode*>(thisObject);
+			jsThis->impl()->setUserInteractionEnabled(value.toBoolean(exec));
+		} else
+			OA_ERROR_INVALID_PROPERTY(exec, "userInteractionEnabled", "bool");
+	}
+	
 	AJ::AJValue ajNodeConstructor(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&) 
 	{
 		return getOAConstructor(AJNodeBindingType, exec, ajoa_cast<AJNode*>(asObject(thisValue))->globalObject());

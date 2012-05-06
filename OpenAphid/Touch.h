@@ -252,13 +252,18 @@ namespace Aphid {
 		bool isTouchEnabled() const {return m_touchEnabled;}
 		void setTouchEnabled(bool b) {m_touchEnabled = b;}
 		
+		bool isUserInteractionEnabled() const {return m_userInteractionEnabled;}
+		void setUserInteractionEnabled(bool b) {m_userInteractionEnabled = b;}
+		
 	protected:
 		TouchEventTarget()
 		: m_touchEnabled(false)
+		, m_userInteractionEnabled(true)
 		{}
 		
 	private:
 		bool m_touchEnabled;
+		bool m_userInteractionEnabled;
 	};
 	
 	///-------------------------------------------------------------------------------------------------------------------

@@ -168,6 +168,14 @@
 	*/
 	void setAJNodeTouchEnabled(AJ::ExecState* exec, AJ::AJObject* thisObject, AJ::AJValue value);
 	/*
+	@return userInteractionEnabled, bool
+	*/
+	AJ::AJValue ajNodeUserInteractionEnabled(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&);
+	/*
+	@param userInteractionEnabled, bool
+	*/
+	void setAJNodeUserInteractionEnabled(AJ::ExecState* exec, AJ::AJObject* thisObject, AJ::AJValue value);
+	/*
 	@return constructor, Node
 	*/
 	AJ::AJValue ajNodeConstructor(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&);
