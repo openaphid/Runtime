@@ -9,7 +9,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJDirectorPrototype);
 #define THUNK_GENERATOR(generator)
 #endif
 
-	static const HashTableValue AJDirectorTableValues[7] = 
+	static const HashTableValue AJDirectorTableValues[8] = 
 	{
 		{"winSize", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajDirectorWinSize), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"winSizeInPixels", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajDirectorWinSizeInPixels), (intptr_t)0 THUNK_GENERATOR(0)},
@@ -17,11 +17,12 @@ ASSERT_CLASS_FITS_IN_CELL(AJDirectorPrototype);
 		{"contentScaleFactor", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajDirectorContentScaleFactor), (intptr_t)setAJDirectorContentScaleFactor THUNK_GENERATOR(0)},
 		{"displayFPS", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajDirectorDisplayFPS), (intptr_t)setAJDirectorDisplayFPS THUNK_GENERATOR(0)},
 		{"fpsInterval", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajDirectorFpsInterval), (intptr_t)setAJDirectorFpsInterval THUNK_GENERATOR(0)},
+		{"multipleTouchEnabled", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajDirectorMultipleTouchEnabled), (intptr_t)setAJDirectorMultipleTouchEnabled THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
 	static JSC_CONST_HASHTABLE HashTable AJDirectorTable = 
-	{16, 15, AJDirectorTableValues, 0};
+	{17, 15, AJDirectorTableValues, 0};
 
 	static const HashTableValue AJDirectorPrototypeTableValues[3] = 
 	{

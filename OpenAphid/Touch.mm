@@ -270,9 +270,9 @@ namespace Aphid {
 				touches.append(touch);
 			} else {
 				RefPtr<PlatformTouch> touch = unmapTouch(t);
-				touches.append(touch);
+				platformEvent->removeTouch(touch.get());
+				touches.append(touch.release());
 			}
-			
 		}
 		
 		if (flag == EventFlagTouchStart) {
@@ -297,10 +297,11 @@ namespace Aphid {
 			}
 		}
 		
+		/*
 		if (flag == EventFlagTouchEnd || flag == EventFlagTouchCancel) {
 			for (PlatformTouchVector::const_iterator it = touches.begin(); it != touches.end(); ++it)
 				platformEvent->removeTouch(it->get());
-		}
+		}*/
 	}
 	
 	void TouchDispatcher::markTouchObjects(AJ::MarkStack &markStack, unsigned int markID)

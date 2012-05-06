@@ -10,7 +10,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJNodeConstructor);
 #define THUNK_GENERATOR(generator)
 #endif
 
-	static const HashTableValue AJNodeTableValues[27] = 
+	static const HashTableValue AJNodeTableValues[28] = 
 	{
 		{"zOrder", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeZOrder), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"camera", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeCamera), (intptr_t)0 THUNK_GENERATOR(0)},
@@ -37,6 +37,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJNodeConstructor);
 		{"ontouchend", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeOntouchend), (intptr_t)setAJNodeOntouchend THUNK_GENERATOR(0)},
 		{"ontouchcancel", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeOntouchcancel), (intptr_t)setAJNodeOntouchcancel THUNK_GENERATOR(0)},
 		{"touchEnabled", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeTouchEnabled), (intptr_t)setAJNodeTouchEnabled THUNK_GENERATOR(0)},
+		{"userInteractionEnabled", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeUserInteractionEnabled), (intptr_t)setAJNodeUserInteractionEnabled THUNK_GENERATOR(0)},
 		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	

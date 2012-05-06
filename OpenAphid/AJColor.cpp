@@ -49,11 +49,13 @@ namespace Aphid {
 	AJObject* AJColorConstructor::constructColor(ExecState* exec, AJObject* constructor, const ArgList& args) 
 	{
 		//Color(color color)
-		if (args.size() >= 1) {
+		if (args.size() >= 1 && args.size() <= 2) {
 			if (
 					ensureColorArg(exec, args, 0, "color")
 					) {
 				Color color = toColor(exec, args.at(0));
+				int alpha = optIntArg(exec, args, 1, color.alpha());
+				color = Color(colorWithAlpha(color.rgba(), alpha));
 				AJOAGlobalObject* globalObject = ajoa_cast<AJColorConstructor*>(constructor)->globalObject();
 				return createAJDataWrapper<AJColor>(exec, globalObject, color);
 			}
