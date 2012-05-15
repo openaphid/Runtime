@@ -19,7 +19,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJSpriteConstructor);
 		{"opacity", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteOpacity), (intptr_t)setAJSpriteOpacity THUNK_GENERATOR(0)},
 		{"color", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteColor), (intptr_t)setAJSpriteColor THUNK_GENERATOR(0)},
 		{"texture", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteTexture), (intptr_t)setAJSpriteTexture THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -41,13 +41,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJSpriteConstructor);
 	
 	bool AJSprite::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJSprite, Base>(exec, &AJSpriteTable, this, propertyName, slot);
 	}
 	
 	bool AJSprite::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJSprite, Base>(exec, &AJSpriteTable, this, propertyName, slot);
 	}
 

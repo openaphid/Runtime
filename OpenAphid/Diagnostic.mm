@@ -62,27 +62,33 @@ namespace Aphid {
   {
 	  if (!s_notification_view) {
 		  s_notification_view = [[UILabel alloc] init];
-		  s_notification_view.font = [UIFont systemFontOfSize:16];
+		  s_notification_view.font = [UIFont systemFontOfSize:18];
 		  s_notification_view.backgroundColor = [UIColor blackColor];
 		  s_notification_view.textColor = [UIColor whiteColor];
 		  s_notification_view.numberOfLines = 0;
 		  s_notification_view.lineBreakMode = UILineBreakModeWordWrap;
-		  s_notification_view.layer.cornerRadius = 6;
+			s_notification_view.opaque = YES;
 	  }
 
 	  s_notification_view.backgroundColor = color;
 	  s_notification_view.text = message;
 
-	  UIView *glView = Director::sharedDirector()->glView();
-	  float maxWidth = glView.frame.size.width;
-	  float maxHeight = glView.frame.size.height;
+	  UIView *parentView = Director::sharedDirector()->glView();
+		if (!parentView)
+			parentView = [UIApplication sharedApplication].keyWindow;
+		if (!parentView)
+			parentView = [[UIApplication sharedApplication].windows objectAtIndex:0];
+		
+		Size size = Director::sharedDirector()->winSize();
+		
 	  CGRect frame = s_notification_view.frame;
-	  frame.size = [s_notification_view sizeThatFits:CGSizeMake(maxWidth, maxHeight)];
-	  frame.size.width = maxWidth;
+	  frame.size = [s_notification_view sizeThatFits:size];
+	  frame.size.width = size.width;
+		
 	  s_notification_view.frame = frame;
 
-	  if (!s_notification_view.superview)
-		  [glView addSubview:s_notification_view];
+	  if (s_notification_view.superview != parentView)
+		  [parentView addSubview:s_notification_view];
 
 	  s_notification_view.hidden = NO;
 

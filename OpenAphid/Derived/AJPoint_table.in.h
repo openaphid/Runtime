@@ -15,7 +15,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJPointConstructor);
 		{"x", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajPointX), (intptr_t)setAJPointX THUNK_GENERATOR(0)},
 		{"y", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajPointY), (intptr_t)setAJPointY THUNK_GENERATOR(0)},
 		{"setXY", Function|DontDelete, (intptr_t)static_cast<NativeFunction>(ajPointFunctionSetXY), (intptr_t)2 THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajPointConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajPointConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -46,13 +46,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJPointConstructor);
 	
 	bool AJPoint::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertySlot<AJPoint, Base>(exec, &AJPointTable, this, propertyName, slot);
 	}
 	
 	bool AJPoint::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertyDescriptor<AJPoint, Base>(exec, &AJPointTable, this, propertyName, slot);
 	}
 

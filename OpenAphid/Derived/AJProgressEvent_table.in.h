@@ -26,13 +26,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJProgressEventPrototype);
 	
 	bool AJProgressEvent::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJProgressEvent, Base>(exec, &AJProgressEventTable, this, propertyName, slot);
 	}
 	
 	bool AJProgressEvent::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJProgressEvent, Base>(exec, &AJProgressEventTable, this, propertyName, slot);
 	}
 

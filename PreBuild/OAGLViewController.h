@@ -17,11 +17,13 @@ limitations under the License.
 
 #import <UIKit/UIKit.h>
 #import "OAConstants.h"
+#import "OABindingProtocol.h"
 
 @interface OAGLViewController : UIViewController
 @property(nonatomic, assign, readwrite) int supportedOrientations;
 - (void) configBundleName:(NSString*)bundleName baseURL:(NSURL*)baseURL developMode:(BOOL)developMode;
 - (void) configGLViewPixelFormat:(OAGLViewPixelFormat)pixelFormat;
 - (BOOL) evaluateScript:(NSString*)filename;
+- (void) setScriptBinding:(id<OABindingProtocol>)binding name:(NSString*)name iOSOnly:(BOOL)iosOnly;
 - (void) terminate;
 @end

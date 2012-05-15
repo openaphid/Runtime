@@ -32,6 +32,7 @@ limitations under the License.
 #include "AJNamespaceActions.h"
 #include "AJConsole.h"
 #include "AJNamespaceiOS.h"
+#include "AJNamespaceExt.h"
 
 #include "AJOABinding.h"
 
@@ -120,6 +121,20 @@ namespace Aphid {
 	  return m_namespaceiOS.get();
   }
 
+	NamespaceExt* OAGlobalObject::namespaceExt() const
+	{
+		if (!m_namespaceExt)
+			m_namespaceExt = NamespaceExt::create();
+		return m_namespaceExt.get();
+	}
+	
+	NamespaceExt* OAGlobalObject::namespaceExtIOS() const
+	{
+		if (!m_namespaceExtIOS)
+			m_namespaceExtIOS = NamespaceExt::create();
+		return m_namespaceExtIOS.get();
+	}
+	
   bool OAGlobalObject::s_explicit_gc = false;
 
   bool OAGlobalObject::garbageCollection()
@@ -152,6 +167,8 @@ namespace Aphid {
 	  markDirectWrapper(optNamespaceCore(), markStack, markID);
 	  markDirectWrapper(optNamespaceJS(), markStack, markID);
 	  markDirectWrapper(optNamespaceActions(), markStack, markID);
+		markDirectWrapper(optNamespaceExt(), markStack, markID);
+		markDirectWrapper(optNamespaceExtIOS(), markStack, markID);
 
 	  markDirectWrapper(optConsole(), markStack, markID);
 

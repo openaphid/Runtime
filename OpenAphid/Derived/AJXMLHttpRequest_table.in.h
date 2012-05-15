@@ -56,13 +56,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJXMLHttpRequestConstructor);
 	
 	bool AJXMLHttpRequest::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJXMLHttpRequest, Base>(exec, &AJXMLHttpRequestTable, this, propertyName, slot);
 	}
 	
 	bool AJXMLHttpRequest::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJXMLHttpRequest, Base>(exec, &AJXMLHttpRequestTable, this, propertyName, slot);
 	}
 

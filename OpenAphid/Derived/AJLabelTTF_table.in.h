@@ -13,7 +13,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJLabelTTFConstructor);
 	static const HashTableValue AJLabelTTFTableValues[3] = 
 	{
 		{"text", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajLabelTTFText), (intptr_t)setAJLabelTTFText THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajLabelTTFConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajLabelTTFConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -26,13 +26,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJLabelTTFConstructor);
 	
 	bool AJLabelTTF::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJLabelTTF, Base>(exec, &AJLabelTTFTable, this, propertyName, slot);
 	}
 	
 	bool AJLabelTTF::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJLabelTTF, Base>(exec, &AJLabelTTFTable, this, propertyName, slot);
 	}
 

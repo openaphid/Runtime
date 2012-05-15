@@ -13,7 +13,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJSpriteBatchNodeConstructor);
 	static const HashTableValue AJSpriteBatchNodeTableValues[3] = 
 	{
 		{"texture", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteBatchNodeTexture), (intptr_t)setAJSpriteBatchNodeTexture THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteBatchNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteBatchNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -34,13 +34,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJSpriteBatchNodeConstructor);
 	
 	bool AJSpriteBatchNode::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJSpriteBatchNode, Base>(exec, &AJSpriteBatchNodeTable, this, propertyName, slot);
 	}
 	
 	bool AJSpriteBatchNode::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJSpriteBatchNode, Base>(exec, &AJSpriteBatchNodeTable, this, propertyName, slot);
 	}
 

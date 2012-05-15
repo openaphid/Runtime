@@ -32,13 +32,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJNodeListPrototype);
 	
 	bool AJNodeList::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJNodeList, Base>(exec, &AJNodeListTable, this, propertyName, slot);
 	}
 	
 	bool AJNodeList::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJNodeList, Base>(exec, &AJNodeListTable, this, propertyName, slot);
 	}
 

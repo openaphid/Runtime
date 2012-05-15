@@ -15,7 +15,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJCameraConstructor);
 		{"eye", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajCameraEye), (intptr_t)setAJCameraEye THUNK_GENERATOR(0)},
 		{"center", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajCameraCenter), (intptr_t)setAJCameraCenter THUNK_GENERATOR(0)},
 		{"up", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajCameraUp), (intptr_t)setAJCameraUp THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajCameraConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajCameraConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -28,13 +28,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJCameraConstructor);
 	
 	bool AJCamera::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJCamera, Base>(exec, &AJCameraTable, this, propertyName, slot);
 	}
 	
 	bool AJCamera::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJCamera, Base>(exec, &AJCameraTable, this, propertyName, slot);
 	}
 

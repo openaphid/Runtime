@@ -11,7 +11,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJOAGlobalObject);
 	{
 		{"console", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajOAGlobalObjectConsole), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"aphid", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajOAGlobalObjectAphid), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"XMLHttpRequest", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajOAGlobalObjectXMLHttpRequestConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"XMLHttpRequest", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajOAGlobalObjectXMLHttpRequestConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -24,13 +24,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJOAGlobalObject);
 	
 	bool AJOAGlobalObject::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJOAGlobalObject, Base>(exec, &AJOAGlobalObjectTable, this, propertyName, slot);
 	}
 	
 	bool AJOAGlobalObject::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJOAGlobalObject, Base>(exec, &AJOAGlobalObjectTable, this, propertyName, slot);
 	}
 

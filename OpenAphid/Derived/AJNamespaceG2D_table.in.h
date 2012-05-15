@@ -11,19 +11,19 @@ ASSERT_CLASS_FITS_IN_CELL(AJNamespaceG2DPrototype);
 
 	static const HashTableValue AJNamespaceG2DTableValues[16] = 
 	{
-		{"Node", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"ColorNode", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DColorNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"GradientNode", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DGradientNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Scene", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DSceneConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Camera", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DCameraConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Texture2D", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DTexture2DConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Sprite", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DSpriteConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"SpriteBatchNode", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DSpriteBatchNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"SpriteFrame", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DSpriteFrameConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Animation", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DAnimationConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Font", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DFontConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"LabelTTF", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DLabelTTFConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"ParticleSystem", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DParticleSystemConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Node", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"ColorNode", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DColorNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"GradientNode", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DGradientNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Scene", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DSceneConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Camera", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DCameraConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Texture2D", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DTexture2DConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Sprite", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DSpriteConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"SpriteBatchNode", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DSpriteBatchNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"SpriteFrame", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DSpriteFrameConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Animation", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DAnimationConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Font", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DFontConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"LabelTTF", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DLabelTTFConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"ParticleSystem", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DParticleSystemConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"director", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DDirector), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"actions", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceG2DActions), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
@@ -38,13 +38,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJNamespaceG2DPrototype);
 	
 	bool AJNamespaceG2D::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJNamespaceG2D, Base>(exec, &AJNamespaceG2DTable, this, propertyName, slot);
 	}
 	
 	bool AJNamespaceG2D::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJNamespaceG2D, Base>(exec, &AJNamespaceG2DTable, this, propertyName, slot);
 	}
 

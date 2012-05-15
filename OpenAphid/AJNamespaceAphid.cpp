@@ -31,6 +31,7 @@ limitations under the License.
 #include "AJNamespaceG2D.h"
 #include "AJNamespaceiOS.h"
 #include "AJNamespaceJS.h"
+#include "AJNamespaceExt.h"
 //end
 
 #include "OAGlobalObject.h"
@@ -97,6 +98,18 @@ namespace Aphid {
 	{
 		AJNamespaceAphid* jsNamespaceAphid = ajoa_cast<AJNamespaceAphid*>(asObject(thisValue));
 		return toAJ(exec, jsNamespaceAphid->globalObject(), jsNamespaceAphid->globalObject()->impl()->namespaceiOS());
+	}
+
+	AJ::AJValue ajNamespaceAphidExt(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&)
+	{
+		AJNamespaceAphid* jsNamespaceAphid = ajoa_cast<AJNamespaceAphid*>(asObject(thisValue));
+		return toAJ(exec, jsNamespaceAphid->globalObject(), jsNamespaceAphid->globalObject()->impl()->namespaceExt());
+	}
+	
+	AJ::AJValue ajNamespaceAphidExtios(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&)
+	{
+		AJNamespaceAphid* jsNamespaceAphid = ajoa_cast<AJNamespaceAphid*>(asObject(thisValue));
+		return toAJ(exec, jsNamespaceAphid->globalObject(), jsNamespaceAphid->globalObject()->impl()->namespaceExtIOS());
 	}
 
 }
