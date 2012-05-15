@@ -12,7 +12,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJSceneConstructor);
 
 	static const HashTableValue AJSceneTableValues[2] = 
 	{
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSceneConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSceneConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -25,13 +25,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJSceneConstructor);
 	
 	bool AJScene::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJScene, Base>(exec, &AJSceneTable, this, propertyName, slot);
 	}
 	
 	bool AJScene::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJScene, Base>(exec, &AJSceneTable, this, propertyName, slot);
 	}
 

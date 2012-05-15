@@ -28,13 +28,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJActionPrototype);
 	
 	bool AJAction::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertySlot<AJAction, Base>(exec, &AJActionTable, this, propertyName, slot);
 	}
 	
 	bool AJAction::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertyDescriptor<AJAction, Base>(exec, &AJActionTable, this, propertyName, slot);
 	}
 

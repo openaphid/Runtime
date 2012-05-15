@@ -19,12 +19,12 @@ limitations under the License.
 
 #import <UIKit/UIKit.h>
 
-#import "runtime/Completion.h"
-#import "runtime/InitializeThreading.h"
-#import "runtime/AJGlobalData.h"
-#import "runtime/AJLock.h"
-#import "API/APIShims.h"
-#import "parser/SourceCode.h"
+#include <runtime/Completion.h>
+#include <runtime/InitializeThreading.h>
+#include <runtime/AJGlobalData.h>
+#include <runtime/AJLock.h>
+#include <API/APIShims.h>
+#include <parser/SourceCode.h>
 
 #import "AJOAGlobalObject.h"
 #import "OAGlobalObject.h"
@@ -34,6 +34,9 @@ limitations under the License.
 #include "SpriteBatchNode.h"
 
 #import "EAGLView.h"
+#include "ObjCDynamicBinding.h"
+#include "AJDynamicBinding.h"
+#include "AJNamespaceExt.h"
 
 #include "Director.h"
 
@@ -194,6 +197,17 @@ using namespace AJ;
 		Diagnostic::error([NSString stringWithFormat:@"Script [%@] is empty?!", urlString]);
 		return YES;
 	}	
+}
+
+- (void)setScriptBinding:(id<OABindingProtocol>)receiver name:(NSString *)name iOSOnly:(BOOL)iosOnly
+{
+	RefPtr<ObjCDynamicBinding> binding = ObjCDynamicBinding::create([name cStringUsingEncoding:NSUTF8StringEncoding], receiver);
+	ExecState* exec = _globalObject->globalExec();
+	AJLock lock(exec);
+	AJNamespaceExt* ajNamespaceExt = ajoa_cast<AJNamespaceExt*>(asObject(toAJ(exec, _globalObject, iosOnly ? _globalObject->impl()->namespaceExtIOS() : _globalObject->impl()->namespaceExt())));
+	AJDynamicBinding* ajBinding = ajoa_cast<AJDynamicBinding*>(asObject(toAJ(exec, _globalObject, binding.get())));
+	ajNamespaceExt->putDirect(Identifier(exec, toUString(name)), ajBinding, ReadOnly | DontDelete);
+	ASSERT(!exec->hadException());
 }
 
 - (BOOL) garbageCollection {

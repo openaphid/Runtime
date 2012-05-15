@@ -9,17 +9,19 @@ ASSERT_CLASS_FITS_IN_CELL(AJNamespaceAphidPrototype);
 #define THUNK_GENERATOR(generator)
 #endif
 
-	static const HashTableValue AJNamespaceAphidTableValues[5] = 
+	static const HashTableValue AJNamespaceAphidTableValues[7] = 
 	{
 		{"core", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceAphidCore), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"g2d", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceAphidG2d), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"js", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceAphidJs), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"ios", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceAphidIos), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"ext", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceAphidExt), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"extios", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceAphidExtios), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
 	static JSC_CONST_HASHTABLE HashTable AJNamespaceAphidTable = 
-	{8, 7, AJNamespaceAphidTableValues, 0};
+	{16, 15, AJNamespaceAphidTableValues, 0};
 
 
 
@@ -27,13 +29,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJNamespaceAphidPrototype);
 	
 	bool AJNamespaceAphid::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJNamespaceAphid, Base>(exec, &AJNamespaceAphidTable, this, propertyName, slot);
 	}
 	
 	bool AJNamespaceAphid::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJNamespaceAphid, Base>(exec, &AJNamespaceAphidTable, this, propertyName, slot);
 	}
 

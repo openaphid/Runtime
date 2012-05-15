@@ -39,13 +39,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJDirectorPrototype);
 	
 	bool AJDirector::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJDirector, Base>(exec, &AJDirectorTable, this, propertyName, slot);
 	}
 	
 	bool AJDirector::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJDirector, Base>(exec, &AJDirectorTable, this, propertyName, slot);
 	}
 

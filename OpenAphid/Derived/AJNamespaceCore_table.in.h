@@ -11,13 +11,13 @@ ASSERT_CLASS_FITS_IN_CELL(AJNamespaceCorePrototype);
 
 	static const HashTableValue AJNamespaceCoreTableValues[8] = 
 	{
-		{"Size", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreSizeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Point", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCorePointConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Rect", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreRectConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"AffineTransformation", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreAffineTransformationConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Vector2", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreVector2Constructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Vector3", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreVector3Constructor), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"Color", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreColorConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Size", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreSizeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Point", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCorePointConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Rect", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreRectConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"AffineTransformation", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreAffineTransformationConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Vector2", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreVector2Constructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Vector3", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreVector3Constructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"Color", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNamespaceCoreColorConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -30,13 +30,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJNamespaceCorePrototype);
 	
 	bool AJNamespaceCore::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJNamespaceCore, Base>(exec, &AJNamespaceCoreTable, this, propertyName, slot);
 	}
 	
 	bool AJNamespaceCore::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJNamespaceCore, Base>(exec, &AJNamespaceCoreTable, this, propertyName, slot);
 	}
 

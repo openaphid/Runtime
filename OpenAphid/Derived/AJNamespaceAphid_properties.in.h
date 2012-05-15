@@ -15,3 +15,11 @@
 	@return ios, NamespaceiOS
 	*/
 	AJ::AJValue ajNamespaceAphidIos(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&);
+	/*
+	@return ext, NamespaceExt
+	*/
+	AJ::AJValue ajNamespaceAphidExt(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&);
+	/*
+	@return extios, NamespaceExt
+	*/
+	AJ::AJValue ajNamespaceAphidExtios(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&);

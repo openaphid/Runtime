@@ -22,6 +22,9 @@ limitations under the License.
 
 #define OA_NATIVE_BENCHMARK 0
 
+#define OA_TARGET_IOS 1
+#define OA_TARGET_ANDROID 0
+
 #if DEBUG
 #define OA_DEV 1
 #else

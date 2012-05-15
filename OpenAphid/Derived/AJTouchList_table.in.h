@@ -26,13 +26,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJTouchListPrototype);
 	
 	bool AJTouchList::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertySlot<AJTouchList, Base>(exec, &AJTouchListTable, this, propertyName, slot);
 	}
 	
 	bool AJTouchList::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertyDescriptor<AJTouchList, Base>(exec, &AJTouchListTable, this, propertyName, slot);
 	}
 

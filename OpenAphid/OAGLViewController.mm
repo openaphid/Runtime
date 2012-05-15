@@ -133,9 +133,20 @@ using namespace Aphid;
 	_glView.frame = rect;
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	UNUSED_PARAM(fromInterfaceOrientation);
+	[[UIApplication sharedApplication] setStatusBarOrientation:self.interfaceOrientation animated:NO];
+}
+
 - (BOOL)evaluateScript:(NSString *)filename
 {
 	return [_scriptBridge evaluateScriptFromFile:filename];
+}
+
+- (void)setScriptBinding:(id<OABindingProtocol>)binding name:(NSString *)name iOSOnly:(BOOL)iosOnly
+{
+	[_scriptBridge setScriptBinding:binding name:name iOSOnly:iosOnly];
 }
 
 - (void)terminate

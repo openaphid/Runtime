@@ -16,7 +16,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJVector3Constructor);
 		{"y", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajVector3Y), (intptr_t)setAJVector3Y THUNK_GENERATOR(0)},
 		{"z", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajVector3Z), (intptr_t)setAJVector3Z THUNK_GENERATOR(0)},
 		{"setXYZ", Function|DontDelete, (intptr_t)static_cast<NativeFunction>(ajVector3FunctionSetXYZ), (intptr_t)3 THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajVector3Constructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajVector3Constructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -47,13 +47,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJVector3Constructor);
 	
 	bool AJVector3::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertySlot<AJVector3, Base>(exec, &AJVector3Table, this, propertyName, slot);
 	}
 	
 	bool AJVector3::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertyDescriptor<AJVector3, Base>(exec, &AJVector3Table, this, propertyName, slot);
 	}
 

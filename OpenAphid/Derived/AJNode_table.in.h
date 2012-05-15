@@ -38,7 +38,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJNodeConstructor);
 		{"ontouchcancel", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeOntouchcancel), (intptr_t)setAJNodeOntouchcancel THUNK_GENERATOR(0)},
 		{"touchEnabled", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeTouchEnabled), (intptr_t)setAJNodeTouchEnabled THUNK_GENERATOR(0)},
 		{"userInteractionEnabled", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeUserInteractionEnabled), (intptr_t)setAJNodeUserInteractionEnabled THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -88,13 +88,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJNodeConstructor);
 	
 	bool AJNode::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJNode, Base>(exec, &AJNodeTable, this, propertyName, slot);
 	}
 	
 	bool AJNode::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJNode, Base>(exec, &AJNodeTable, this, propertyName, slot);
 	}
 

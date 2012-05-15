@@ -141,6 +141,14 @@
 		D67997B214E168370003BA1B /* ActionInterval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D67997B114E168370003BA1B /* ActionInterval.cpp */; };
 		D68335C814AF406800CD4270 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D68335C714AF406800CD4270 /* Foundation.framework */; };
 		D683386914AF52C800CD4270 /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D683386814AF52C800CD4270 /* Node.cpp */; };
+		D69F44E5156245DE001BD70F /* DynamicBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = D69F44E2156245DE001BD70F /* DynamicBinding.h */; };
+		D69F44E6156245DE001BD70F /* ObjCDynamicBinding.h in Headers */ = {isa = PBXBuildFile; fileRef = D69F44E3156245DE001BD70F /* ObjCDynamicBinding.h */; };
+		D69F44E7156245DE001BD70F /* ObjCDynamicBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = D69F44E4156245DE001BD70F /* ObjCDynamicBinding.mm */; };
+		D69F44EA156245F4001BD70F /* AJDynamicBinding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D69F44E8156245F4001BD70F /* AJDynamicBinding.cpp */; };
+		D69F44EB156245F4001BD70F /* AJNamespaceExt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D69F44E9156245F4001BD70F /* AJNamespaceExt.cpp */; };
+		D69F44ED15624601001BD70F /* OABindingProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D69F44EC15624601001BD70F /* OABindingProtocol.h */; };
+		D69F44F01562460E001BD70F /* NamespaceExt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D69F44EE1562460E001BD70F /* NamespaceExt.cpp */; };
+		D69F44F11562460E001BD70F /* NamespaceExt.h in Headers */ = {isa = PBXBuildFile; fileRef = D69F44EF1562460E001BD70F /* NamespaceExt.h */; };
 		D6A8AE4E14D1494B00C14D77 /* AJOAObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6A8AE4D14D1494B00C14D77 /* AJOAObject.cpp */; };
 		D6A8AE5114D17C5C00C14D77 /* OAData.h in Headers */ = {isa = PBXBuildFile; fileRef = D6A8AE5014D17C5C00C14D77 /* OAData.h */; };
 		D6A8AE5214D17D1300C14D77 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D661D5B214B054DC00585BF5 /* CoreGraphics.framework */; };
@@ -346,6 +354,14 @@
 		D683386814AF52C800CD4270 /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
 		D683387514AF556B00CD4270 /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		D68559AB14B093E500B212F6 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		D69F44E2156245DE001BD70F /* DynamicBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicBinding.h; sourceTree = "<group>"; };
+		D69F44E3156245DE001BD70F /* ObjCDynamicBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCDynamicBinding.h; sourceTree = "<group>"; };
+		D69F44E4156245DE001BD70F /* ObjCDynamicBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjCDynamicBinding.mm; sourceTree = "<group>"; };
+		D69F44E8156245F4001BD70F /* AJDynamicBinding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AJDynamicBinding.cpp; sourceTree = "<group>"; };
+		D69F44E9156245F4001BD70F /* AJNamespaceExt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AJNamespaceExt.cpp; sourceTree = "<group>"; };
+		D69F44EC15624601001BD70F /* OABindingProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABindingProtocol.h; sourceTree = "<group>"; };
+		D69F44EE1562460E001BD70F /* NamespaceExt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NamespaceExt.cpp; sourceTree = "<group>"; };
+		D69F44EF1562460E001BD70F /* NamespaceExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NamespaceExt.h; sourceTree = "<group>"; };
 		D6A8AE4D14D1494B00C14D77 /* AJOAObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AJOAObject.cpp; sourceTree = "<group>"; };
 		D6A8AE5014D17C5C00C14D77 /* OAData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAData.h; sourceTree = "<group>"; };
 		D6A8AE5314D17D9100C14D77 /* OAData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OAData.cpp; sourceTree = "<group>"; };
@@ -466,6 +482,7 @@
 		D61EB89414B1BE30004BF2D5 /* plain */ = {
 			isa = PBXGroup;
 			children = (
+				D69F44E0156245B6001BD70F /* bridge */,
 				D6EAC0041531713A008079C0 /* res */,
 				D6AB077315313D2900C25582 /* namespace */,
 				D6B42E4D151C4CA400423F61 /* particle */,
@@ -593,6 +610,8 @@
 		D677800514C46A9E008364BE /* JS */ = {
 			isa = PBXGroup;
 			children = (
+				D69F44E8156245F4001BD70F /* AJDynamicBinding.cpp */,
+				D69F44E9156245F4001BD70F /* AJNamespaceExt.cpp */,
 				D621230114F6923300E9604E /* AJAction.cpp */,
 				D6C550241542E880007D2BAF /* AJAffineTransformation.cpp */,
 				D621230214F6923300E9604E /* AJAnimation.cpp */,
@@ -717,9 +736,21 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		D69F44E0156245B6001BD70F /* bridge */ = {
+			isa = PBXGroup;
+			children = (
+				D69F44E2156245DE001BD70F /* DynamicBinding.h */,
+				D69F44E3156245DE001BD70F /* ObjCDynamicBinding.h */,
+				D69F44E4156245DE001BD70F /* ObjCDynamicBinding.mm */,
+			);
+			name = bridge;
+			sourceTree = "<group>";
+		};
 		D6AB077315313D2900C25582 /* namespace */ = {
 			isa = PBXGroup;
 			children = (
+				D69F44EE1562460E001BD70F /* NamespaceExt.cpp */,
+				D69F44EF1562460E001BD70F /* NamespaceExt.h */,
 				D6CDA42714ED40DD00C86C31 /* NamespaceActions.cpp */,
 				D6CDA42414ED3FAC00C86C31 /* NamespaceActions.h */,
 				D635634415331AFF00D34D67 /* NamespaceAphid.cpp */,
@@ -739,6 +770,7 @@
 		D6AB077F15315E4C00C25582 /* public */ = {
 			isa = PBXGroup;
 			children = (
+				D69F44EC15624601001BD70F /* OABindingProtocol.h */,
 				D6AB07821531623C00C25582 /* OAGLViewController.h */,
 				D6AB07831531623C00C25582 /* OAGLViewController.mm */,
 				D65459C31531CABE00BD9814 /* OARootViewController.h */,
@@ -848,6 +880,10 @@
 				D635634215331AF400D34D67 /* NamespaceAphid.h in Headers */,
 				D60DF0CD153A77D6008E9988 /* OAConstants.h in Headers */,
 				D6E233D8153EB61900962713 /* NamespaceiOS.h in Headers */,
+				D69F44E5156245DE001BD70F /* DynamicBinding.h in Headers */,
+				D69F44E6156245DE001BD70F /* ObjCDynamicBinding.h in Headers */,
+				D69F44ED15624601001BD70F /* OABindingProtocol.h in Headers */,
+				D69F44F11562460E001BD70F /* NamespaceExt.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1013,6 +1049,10 @@
 				D6E233DB153EB66B00962713 /* NamespaceiOS.cpp in Sources */,
 				D6E233DD153EB76100962713 /* AJNamespaceiOS.cpp in Sources */,
 				D6C550251542E880007D2BAF /* AJAffineTransformation.cpp in Sources */,
+				D69F44E7156245DE001BD70F /* ObjCDynamicBinding.mm in Sources */,
+				D69F44EA156245F4001BD70F /* AJDynamicBinding.cpp in Sources */,
+				D69F44EB156245F4001BD70F /* AJNamespaceExt.cpp in Sources */,
+				D69F44F01562460E001BD70F /* NamespaceExt.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

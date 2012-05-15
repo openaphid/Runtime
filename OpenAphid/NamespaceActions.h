@@ -18,8 +18,8 @@ limitations under the License.
 #ifndef OpenAphid_NamespaceActions_h
 #define OpenAphid_NamespaceActions_h
 
-#include "wtf/PassRefPtr.h"
-#include "wtf/RefCounted.h"
+#include <wtf/PassRefPtr.h>
+#include <wtf/RefCounted.h>
 #include "DirectWrapper.h"
 
 namespace Aphid {

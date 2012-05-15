@@ -10,6 +10,7 @@ enum AJOABindingType {
 	AJColorNodeBindingType,
 	AJConsoleBindingType,
 	AJDirectorBindingType,
+	AJDynamicBindingBindingType,
 	AJEaseActionBindingType,
 	AJEventBindingType,
 	AJFiniteTimeActionBindingType,
@@ -22,6 +23,7 @@ enum AJOABindingType {
 	AJNamespaceActionsBindingType,
 	AJNamespaceAphidBindingType,
 	AJNamespaceCoreBindingType,
+	AJNamespaceExtBindingType,
 	AJNamespaceG2DBindingType,
 	AJNamespaceJSBindingType,
 	AJNamespaceiOSBindingType,
@@ -44,7 +46,7 @@ enum AJOABindingType {
 	AJVector2BindingType,
 	AJVector3BindingType,
 	AJXMLHttpRequestBindingType,
-	AJOABindingTypeMax = 42
+	AJOABindingTypeMax = 44
 };
 
 #endif

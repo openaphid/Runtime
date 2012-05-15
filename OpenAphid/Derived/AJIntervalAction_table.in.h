@@ -24,13 +24,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJIntervalActionPrototype);
 	
 	bool AJIntervalAction::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJIntervalAction, Base>(exec, &AJIntervalActionTable, this, propertyName, slot);
 	}
 	
 	bool AJIntervalAction::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJIntervalAction, Base>(exec, &AJIntervalActionTable, this, propertyName, slot);
 	}
 

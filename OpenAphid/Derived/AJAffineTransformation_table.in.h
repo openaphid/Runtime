@@ -20,7 +20,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJAffineTransformationConstructor);
 		{"ty", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajAffineTransformationTy), (intptr_t)setAJAffineTransformationTy THUNK_GENERATOR(0)},
 		{"setAll", Function|DontDelete, (intptr_t)static_cast<NativeFunction>(ajAffineTransformationFunctionSetAll), (intptr_t)6 THUNK_GENERATOR(0)},
 		{"clone", Function|DontDelete, (intptr_t)static_cast<NativeFunction>(ajAffineTransformationFunctionClone), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajAffineTransformationConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajAffineTransformationConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -33,13 +33,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJAffineTransformationConstructor);
 	
 	bool AJAffineTransformation::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertySlot<AJAffineTransformation, Base>(exec, &AJAffineTransformationTable, this, propertyName, slot);
 	}
 	
 	bool AJAffineTransformation::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertyDescriptor<AJAffineTransformation, Base>(exec, &AJAffineTransformationTable, this, propertyName, slot);
 	}
 
