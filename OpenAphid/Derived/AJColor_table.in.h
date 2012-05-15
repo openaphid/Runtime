@@ -16,7 +16,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJColorConstructor);
 		{"g", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajColorG), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"b", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajColorB), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"a", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajColorA), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajColorConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajColorConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -37,13 +37,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJColorConstructor);
 	
 	bool AJColor::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJColor, Base>(exec, &AJColorTable, this, propertyName, slot);
 	}
 	
 	bool AJColor::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJColor, Base>(exec, &AJColorTable, this, propertyName, slot);
 	}
 

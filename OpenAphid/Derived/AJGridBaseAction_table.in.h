@@ -24,13 +24,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJGridBaseActionPrototype);
 	
 	bool AJGridBaseAction::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJGridBaseAction, Base>(exec, &AJGridBaseActionTable, this, propertyName, slot);
 	}
 	
 	bool AJGridBaseAction::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJGridBaseAction, Base>(exec, &AJGridBaseActionTable, this, propertyName, slot);
 	}
 

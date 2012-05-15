@@ -48,9 +48,6 @@ namespace Aphid {
 			UString exceptionURL = exceptionObj->get(exec, Identifier(exec, "sourceURL")).toString(exec);
 			UString errorMessage = exception.toString(exec);
 			exec->clearException();
-			/*if (ExceptionBase* exceptionBase = toExceptionBase(exception))
-        errorMessage = toUString(exceptionBase->message() + ": "  + exceptionBase->description());
-			*/
 			
 			Diagnostic::error(formatUString("[%s:%d] JS Exception: %s", exceptionURL.UTF8String().data(), lineNO, errorMessage.UTF8String().data()));
 		} else 

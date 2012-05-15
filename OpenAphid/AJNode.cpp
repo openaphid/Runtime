@@ -324,7 +324,10 @@ namespace Aphid {
 	AJ::AJValue ajNodeOnframeupdate(AJ::ExecState*, AJ::AJValue thisValue, const AJ::Identifier&) 
 	{
 		AJNode* ajNode = ajoa_cast<AJNode*>(asObject(thisValue));
-		return ajNode->impl()->jsUpdateCallback();
+		if (AJObject* callback = ajNode->impl()->jsUpdateCallback())
+			return callback;
+		else 
+			return jsNull();
 	}
 	
 	void setAJNodeOnframeupdate(AJ::ExecState* exec, AJ::AJObject* thisObject, AJ::AJValue value) 

@@ -12,7 +12,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJParticleSystemConstructor);
 
 	static const HashTableValue AJParticleSystemTableValues[4] = 
 	{
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajParticleSystemConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajParticleSystemConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"texture", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajParticleSystemTexture), (intptr_t)setAJParticleSystemTexture THUNK_GENERATOR(0)},
 		{"blendAdditive", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajParticleSystemBlendAdditive), (intptr_t)setAJParticleSystemBlendAdditive THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
@@ -27,13 +27,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJParticleSystemConstructor);
 	
 	bool AJParticleSystem::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJParticleSystem, Base>(exec, &AJParticleSystemTable, this, propertyName, slot);
 	}
 	
 	bool AJParticleSystem::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJParticleSystem, Base>(exec, &AJParticleSystemTable, this, propertyName, slot);
 	}
 

@@ -29,6 +29,7 @@ limitations under the License.
 #include "NamespaceG2D.h"
 #include "NamespaceActions.h"
 #include "NamespaceiOS.h"
+#include "NamespaceExt.h"
 
 #include "OAConfig.h"
 
@@ -68,6 +69,12 @@ namespace Aphid {
 		NamespaceiOS* namespaceiOS() const;
 		NamespaceiOS* optNamespaceiOS() const {return m_namespaceiOS.get();}
 		
+		NamespaceExt* namespaceExt() const;
+		NamespaceExt* optNamespaceExt() const {return m_namespaceExt.get();}
+		
+		NamespaceExt* namespaceExtIOS() const;
+		NamespaceExt* optNamespaceExtIOS() const {return m_namespaceExtIOS.get();}
+		
 		bool garbageCollection();
 		
 		virtual void markObjects(AJ::MarkStack& markStack, unsigned markID);
@@ -93,8 +100,10 @@ namespace Aphid {
 		mutable RefPtr<NamespaceJS> m_namespaceJS;
 		mutable RefPtr<NamespaceActions> m_namespaceActions;
 		mutable RefPtr<NamespaceiOS> m_namespaceiOS;
+		mutable RefPtr<NamespaceExt> m_namespaceExt;
+		mutable RefPtr<NamespaceExt> m_namespaceExtIOS;
 		
-		HeapStatistic m_heapStats; //TODO, placeholder for future GC strategy
+		HeapStatistic m_heapStats; //TODO, placeholder for future GC tuning
 	}; // class OAGlobalObject
 	
 }// namespace Aphid

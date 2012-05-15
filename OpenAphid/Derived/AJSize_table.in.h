@@ -15,7 +15,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJSizeConstructor);
 		{"width", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSizeWidth), (intptr_t)setAJSizeWidth THUNK_GENERATOR(0)},
 		{"height", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSizeHeight), (intptr_t)setAJSizeHeight THUNK_GENERATOR(0)},
 		{"setWH", Function|DontDelete, (intptr_t)static_cast<NativeFunction>(ajSizeFunctionSetWH), (intptr_t)2 THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSizeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSizeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -46,13 +46,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJSizeConstructor);
 	
 	bool AJSize::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertySlot<AJSize, Base>(exec, &AJSizeTable, this, propertyName, slot);
 	}
 	
 	bool AJSize::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertyDescriptor<AJSize, Base>(exec, &AJSizeTable, this, propertyName, slot);
 	}
 

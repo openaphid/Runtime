@@ -39,13 +39,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJEventPrototype);
 	
 	bool AJEvent::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJEvent, Base>(exec, &AJEventTable, this, propertyName, slot);
 	}
 	
 	bool AJEvent::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJEvent, Base>(exec, &AJEventTable, this, propertyName, slot);
 	}
 

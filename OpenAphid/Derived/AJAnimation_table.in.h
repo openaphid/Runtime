@@ -13,7 +13,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJAnimationConstructor);
 	static const HashTableValue AJAnimationTableValues[3] = 
 	{
 		{"delay", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajAnimationDelay), (intptr_t)setAJAnimationDelay THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajAnimationConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajAnimationConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -34,13 +34,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJAnimationConstructor);
 	
 	bool AJAnimation::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJAnimation, Base>(exec, &AJAnimationTable, this, propertyName, slot);
 	}
 	
 	bool AJAnimation::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJAnimation, Base>(exec, &AJAnimationTable, this, propertyName, slot);
 	}
 

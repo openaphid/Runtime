@@ -19,7 +19,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJTexture2DConstructor);
 		{"name", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajTexture2DName), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"hasPremultipliedAlpha", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajTexture2DHasPremultipliedAlpha), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"antialias", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajTexture2DAntialias), (intptr_t)setAJTexture2DAntialias THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajTexture2DConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajTexture2DConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -40,13 +40,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJTexture2DConstructor);
 	
 	bool AJTexture2D::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJTexture2D, Base>(exec, &AJTexture2DTable, this, propertyName, slot);
 	}
 	
 	bool AJTexture2D::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJTexture2D, Base>(exec, &AJTexture2DTable, this, propertyName, slot);
 	}
 

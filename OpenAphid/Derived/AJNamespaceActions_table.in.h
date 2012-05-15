@@ -119,13 +119,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJNamespaceActionsPrototype);
 	
 	bool AJNamespaceActions::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJNamespaceActions, Base>(exec, &AJNamespaceActionsTable, this, propertyName, slot);
 	}
 	
 	bool AJNamespaceActions::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJNamespaceActions, Base>(exec, &AJNamespaceActionsTable, this, propertyName, slot);
 	}
 

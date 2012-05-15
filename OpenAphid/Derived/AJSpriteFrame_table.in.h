@@ -16,7 +16,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJSpriteFrameConstructor);
 		{"rectInPixels", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteFrameRectInPixels), (intptr_t)setAJSpriteFrameRectInPixels THUNK_GENERATOR(0)},
 		{"rotated", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteFrameRotated), (intptr_t)setAJSpriteFrameRotated THUNK_GENERATOR(0)},
 		{"texture", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteFrameTexture), (intptr_t)setAJSpriteFrameTexture THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteFrameConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajSpriteFrameConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -29,13 +29,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJSpriteFrameConstructor);
 	
 	bool AJSpriteFrame::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJSpriteFrame, Base>(exec, &AJSpriteFrameTable, this, propertyName, slot);
 	}
 	
 	bool AJSpriteFrame::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJSpriteFrame, Base>(exec, &AJSpriteFrameTable, this, propertyName, slot);
 	}
 

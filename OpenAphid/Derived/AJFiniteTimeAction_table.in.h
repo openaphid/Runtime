@@ -24,13 +24,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJFiniteTimeActionPrototype);
 	
 	bool AJFiniteTimeAction::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJFiniteTimeAction, Base>(exec, &AJFiniteTimeActionTable, this, propertyName, slot);
 	}
 	
 	bool AJFiniteTimeAction::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJFiniteTimeAction, Base>(exec, &AJFiniteTimeActionTable, this, propertyName, slot);
 	}
 

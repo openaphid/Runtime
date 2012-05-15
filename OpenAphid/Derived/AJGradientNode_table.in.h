@@ -16,7 +16,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJGradientNodeConstructor);
 		{"endColor", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajGradientNodeEndColor), (intptr_t)setAJGradientNodeEndColor THUNK_GENERATOR(0)},
 		{"vector", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajGradientNodeVector), (intptr_t)setAJGradientNodeVector THUNK_GENERATOR(0)},
 		{"compressedInterpolation", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajGradientNodeCompressedInterpolation), (intptr_t)setAJGradientNodeCompressedInterpolation THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajGradientNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajGradientNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -29,13 +29,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJGradientNodeConstructor);
 	
 	bool AJGradientNode::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJGradientNode, Base>(exec, &AJGradientNodeTable, this, propertyName, slot);
 	}
 	
 	bool AJGradientNode::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJGradientNode, Base>(exec, &AJGradientNodeTable, this, propertyName, slot);
 	}
 

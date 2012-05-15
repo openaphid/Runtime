@@ -18,6 +18,7 @@ limitations under the License.
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "OAConstants.h"
+#import "OABindingProtocol.h"
 
 @interface ScriptBridge : NSObject
 
@@ -33,6 +34,8 @@ limitations under the License.
 - (BOOL) evaluateScriptFromFile:(NSString *)filename;
 
 - (BOOL) evaluateScript:(NSString *)script URLString:(NSString *)urlString repeat:(NSUInteger)repeat;
+
+- (void)setScriptBinding:(id<OABindingProtocol>)receiver name:(NSString *)name iOSOnly:(BOOL)iosOnly;
 
 - (BOOL) garbageCollection;
 

@@ -19,7 +19,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJRectConstructor);
 		{"origin", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajRectOrigin), (intptr_t)setAJRectOrigin THUNK_GENERATOR(0)},
 		{"size", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajRectSize), (intptr_t)setAJRectSize THUNK_GENERATOR(0)},
 		{"setXYWH", Function|DontDelete, (intptr_t)static_cast<NativeFunction>(ajRectFunctionSetXYWH), (intptr_t)4 THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajRectConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajRectConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -50,13 +50,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJRectConstructor);
 	
 	bool AJRect::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertySlot<AJRect, Base>(exec, &AJRectTable, this, propertyName, slot);
 	}
 	
 	bool AJRect::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticPropertyDescriptor<AJRect, Base>(exec, &AJRectTable, this, propertyName, slot);
 	}
 

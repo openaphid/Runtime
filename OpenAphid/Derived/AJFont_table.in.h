@@ -14,7 +14,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJFontConstructor);
 	{
 		{"fontName", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajFontFontName), (intptr_t)0 THUNK_GENERATOR(0)},
 		{"fontSize", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajFontFontSize), (intptr_t)0 THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajFontConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajFontConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -27,13 +27,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJFontConstructor);
 	
 	bool AJFont::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJFont, Base>(exec, &AJFontTable, this, propertyName, slot);
 	}
 	
 	bool AJFont::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJFont, Base>(exec, &AJFontTable, this, propertyName, slot);
 	}
 

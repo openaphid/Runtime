@@ -14,7 +14,7 @@ ASSERT_CLASS_FITS_IN_CELL(AJColorNodeConstructor);
 	{
 		{"color", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajColorNodeColor), (intptr_t)setAJColorNodeColor THUNK_GENERATOR(0)},
 		{"opacity", DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajColorNodeOpacity), (intptr_t)setAJColorNodeOpacity THUNK_GENERATOR(0)},
-		{"constructor", ReadOnly|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajColorNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
+		{"constructor", ReadOnly|DontEnum|DontDelete, (intptr_t)static_cast<PropertySlot::GetValueFunc>(ajColorNodeConstructor), (intptr_t)0 THUNK_GENERATOR(0)},
 		{0, 0, 0, 0 THUNK_GENERATOR(0)}
 	};	
 
@@ -27,13 +27,11 @@ ASSERT_CLASS_FITS_IN_CELL(AJColorNodeConstructor);
 	
 	bool AJColorNode::getOwnPropertySlot(ExecState* exec, const Identifier& propertyName, PropertySlot& slot) 
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueSlot<AJColorNode, Base>(exec, &AJColorNodeTable, this, propertyName, slot);
 	}
 	
 	bool AJColorNode::getOwnPropertyDescriptor(ExecState* exec, const Identifier& propertyName, PropertyDescriptor& slot)
 	{
-		//TODO: a rough guess during code generation
 		return getStaticValueDescriptor<AJColorNode, Base>(exec, &AJColorNodeTable, this, propertyName, slot);
 	}
 

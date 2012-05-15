@@ -28,6 +28,9 @@ AJ::Structure* AJOAGlobalObject::createOAStructure(AJOABindingType type, AJ::Exe
 		case AJDirectorBindingType:
 			s = AJDirector::createStructure(AJDirector::createPrototype(exec, globalObject)).releaseRef();
 			break;
+		case AJDynamicBindingBindingType:
+			s = AJDynamicBinding::createStructure(AJDynamicBinding::createPrototype(exec, globalObject)).releaseRef();
+			break;
 		case AJEaseActionBindingType:
 			s = AJEaseAction::createStructure(AJEaseAction::createPrototype(exec, globalObject)).releaseRef();
 			break;
@@ -63,6 +66,9 @@ AJ::Structure* AJOAGlobalObject::createOAStructure(AJOABindingType type, AJ::Exe
 			break;
 		case AJNamespaceCoreBindingType:
 			s = AJNamespaceCore::createStructure(AJNamespaceCore::createPrototype(exec, globalObject)).releaseRef();
+			break;
+		case AJNamespaceExtBindingType:
+			s = AJNamespaceExt::createStructure(AJNamespaceExt::createPrototype(exec, globalObject)).releaseRef();
 			break;
 		case AJNamespaceG2DBindingType:
 			s = AJNamespaceG2D::createStructure(AJNamespaceG2D::createPrototype(exec, globalObject)).releaseRef();
