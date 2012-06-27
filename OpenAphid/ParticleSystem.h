@@ -92,7 +92,7 @@ namespace Aphid {
 		union {
 			// Mode A: gravity, direction, radial accel, tangential accel
 			struct {
-				CGPoint		dir;
+				Point		dir;
 				float		radialAccel;
 				float		tangentialAccel;
 			} A;
@@ -328,7 +328,7 @@ namespace Aphid {
 			// Mode A:Gravity + Tangential Accel + Radial Accel
 			struct {
 				// gravity of the particles
-				CGPoint gravity;
+				Point gravity;
 				
 				// The speed the particles will have.
 				float speed;

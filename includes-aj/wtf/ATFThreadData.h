@@ -55,7 +55,11 @@ limitations under the License.
 //    // We need to check for e.g. database objects manipulating strings on secondary threads.
 // Always enabling this is safe, and should be a better option until we can come up
 // with a better define.
+#if PLATFORM(ANDROID)
+#define WTFTHREADDATA_MULTITHREADED 0
+#else
 #define WTFTHREADDATA_MULTITHREADED 1
+#endif
 
 #if WTFTHREADDATA_MULTITHREADED
 #include <wtf/ThreadSpecific.h>

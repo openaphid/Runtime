@@ -1,3 +1,7 @@
+## Android v0.1 (2012-06-26)
+
+- First public release.
+
 ## 0.2 (2012-05-15)
 
 - New binding system for exposing Objective-C methods to JavaScript

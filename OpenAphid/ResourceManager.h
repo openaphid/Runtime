@@ -23,12 +23,23 @@ limitations under the License.
 #include <wtf/FastAllocBase.h>
 #include <wtf/Noncopyable.h>
 #include <WTFString.h>
+#include <wtf/text/AtomicString.h>
+#include <wtf/ByteArray.h>
+#include <wtf/PassRefPtr.h>
 
+#if PLATFORM(IPHONE)
 #ifdef __OBJC__
 @class UIImage;
 #endif
+#endif
+
+#if PLATFORM(ANDROID)
+#include "OAJNIUtil.h"
+#endif
 
 namespace Aphid {
+	
+#if PLATFORM(IPHONE)
 #ifndef __OBJC__
 	class NSString;
 	class NSBundle;
@@ -36,6 +47,7 @@ namespace Aphid {
 	class UIImage;
 	class NSData;
 #endif
+#endif //PLATFORM(IPHONE)
 	
 	class ResourceManager : public Noncopyable {
 	public:
@@ -43,27 +55,42 @@ namespace Aphid {
 		
 		static ResourceManager* sharedManager();
 		
+#if PLATFORM(IPHONE)
 		NSURL* baseURL() const {return m_baseURL;}
 		void setBaseURL(NSURL* url);
 		
-		void setBundleName(NSString *name);
-		NSString* bundleName() const {return m_bundleName;}
-		
-		String loadStringInBundle(const char* name);
+		//TODO: .mm file should be fixed to use new methods
+		//void setBundleName(NSString *name);
+		//NSString* bundleName() const {return m_bundleName;}
 		
 		UIImage* loadUIImageInBundle(const char* name);
 		UIImage* loadUIImageInBundle(NSString *name);
 		NSData* loadNSDataInBundle(NSString* name, bool supressLogging=false);
 		NSString* loadNSStringInBundle(NSString* name);
+#endif
+		
+		//void setBundleName(const String& name);
+		//String bundleName() const {return m_bundleName;}
+		
+		PassRefPtr<ATF::ByteArray> loadDataInBundle(const char* name, bool supressLogging=false);		
+		String loadStringInBundle(const char* name);
+		
+#if PLATFORM(ANDROID)
+		PassOwnPtr<JNI::LocalObject> loadBitmapInBundle(const char* name);
+#endif
 		
 	protected:
 		ResourceManager();
 		
 		static ResourceManager* s_instance;
 		
-		NSString* m_bundleName;
+		AtomicString m_bundleName;
+
+#if PLATFORM(IPHONE)
+		//NSString* m_bundleName;
 		NSBundle* m_bundle;
 		NSURL* m_baseURL;
+#endif
 	};
 }
 

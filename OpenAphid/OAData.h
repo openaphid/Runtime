@@ -18,17 +18,46 @@ limitations under the License.
 #ifndef OpenAphid_OAData_h
 #define OpenAphid_OAData_h
 
+#if PLATFORM(IPHONE)
 #include <CoreGraphics/CGGeometry.h>
 #include <CoreGraphics/CGAffineTransform.h>
+#endif
 
 #include "OAUtil.h"
 
 namespace Aphid {
+#if PLATFORM(IPHONE)
 	typedef CGPoint Point;
 	typedef CGSize Size;
 	typedef CGRect Rect;
 	typedef CGAffineTransform AffineTransform;
+#endif
+
 	typedef float TimeSec;
+	
+	struct Point {
+		float x;
+		float y;
+	};
+
+	struct Size {
+		float width;
+		float height;
+	};
+
+	struct Rect {
+		Point origin;
+		Size size;
+	};
+
+	struct AffineTransform {
+		float a;
+		float b;
+		float c;
+		float d;
+		float tx;
+		float ty;
+	};
 	
 	struct Vector2 {
 		float x;
@@ -56,6 +85,7 @@ namespace Aphid {
 	extern const Vector2 Vector2Identity;
 	extern const Vector3 Vector3Zero;
 	
+#if PLATFORM(IPHONE)
 #define PointEqual(p1, p2) CGPointEqualToPoint((p1), (p2))
 #define SizeEqual(s1, s2) CGSizeEqualToSize((s1), (s2))
 #define RectEqual(r1, r2) CGRectEqualToRect((r1), (r2))
@@ -66,7 +96,7 @@ namespace Aphid {
 #define SizeMake(w, h) CGSizeMake((w), (h))
 #define AffineTransformMake(a, b, c, d, tx, ty)	CGAffineTransformMake((a), (b), (c), (d), (tx), (ty))
 #define AffineTransformTranslate(t, tx, ty) CGAffineTransformTranslate((t), (tx), (ty))
-#define AffineTransformRotate(t, angel) CGAffineTransformRotate((t), (angel))
+#define AffineTransformRotate(t, angle) CGAffineTransformRotate((t), (angle))
 #define AffineTransformConcat(t1, t2) CGAffineTransformConcat((t1), (t2))
 #define AffineTransformScale(t, sx, sy)	CGAffineTransformScale((t), (sx), (sy))
 #define AffineTransformInvert(t) CGAffineTransformInvert((t))
@@ -75,6 +105,98 @@ namespace Aphid {
 #define RectApplyAffineTransform(r, t) CGRectApplyAffineTransform((r), (t))
 	
 #define RectContainsPoint(r, p) CGRectContainsPoint((r), (p))
+#else
+	static inline int PointEqual(const Point& p1, const Point& p2)
+	{
+		return p1.x == p2.x && p1.y == p2.y;
+	}
+
+	static inline int SizeEqual(const Size& s1, const Size& s2)
+	{
+		return s1.width == s2.width && s1.height == s2.height;
+	}
+
+	static inline int RectEqual(const Rect& r1, const Rect& r2)
+	{
+		return PointEqual(r1.origin, r2.origin) && SizeEqual(r1.size, r2.size);
+	}
+
+	static inline int AffineTransformIsIdentity(const AffineTransform& t)
+	{
+		//TODO
+		return 0;
+	}
+
+	static inline Rect RectMake(float x, float y, float w, float h)
+	{
+		Rect r;
+		r.origin.x = x;
+		r.origin.y = y;
+		r.size.width = w;
+		r.size.height = h;
+		return r;
+	}
+
+	static inline Point PointMake(float x, float y)
+	{
+		return (Point){x, y};
+	}
+
+	static inline Size SizeMake(float w, float h)
+	{
+		return (Size){w, h};
+	}
+
+	static inline AffineTransform AffineTransformMake(float a, float b, float c, float d, float tx, float ty)
+	{
+		return (AffineTransform){a, b, c, d, tx, ty};
+	}
+
+	static inline AffineTransform AffineTransformTranslate(const AffineTransform& t, float tx, float ty)
+	{
+		return AffineTransformMake(t.a, t.b, t.c, t.d, t.tx + t.a * tx + t.c * ty, t.ty + t.b * tx + t.d * ty);
+	}
+
+	AffineTransform AffineTransformRotate(const AffineTransform& t, float angle);
+
+	static AffineTransform AffineTransformConcat(const AffineTransform& t1, const AffineTransform& t2)
+	{
+		return AffineTransformMake(t1.a * t2.a + t1.b * t2.c, t1.a * t2.b + t1.b * t2.d,
+									t1.c * t2.a + t1.d * t2.c, t1.c * t2.b + t1.d * t2.d,
+									t1.tx * t2.a + t1.ty * t2.c + t2.tx,
+									t1.tx * t2.b + t1.ty * t2.d + t2.ty);
+	}
+
+	static inline AffineTransform AffineTransformScale(const AffineTransform& t, float sx, float sy)
+	{
+		return AffineTransformMake(t.a * sx, t.b * sx, t.c * sy, t.d * sy, t.tx, t.ty);
+	}
+
+	static AffineTransform AffineTransformInvert(const AffineTransform& t)
+	{
+		float determinant = 1 / (t.a * t.d - t.b * t.c);
+
+    	return AffineTransformMake(determinant * t.d, -determinant * t.b, -determinant * t.c, determinant * t.a,
+							determinant * (t.c * t.ty - t.d * t.tx), determinant * (t.b * t.tx - t.a * t.ty) );
+	}
+
+	static Point PointApplyAffineTransform(const Point& p, const AffineTransform& t)
+	{
+		
+  		return (Point){
+  						(float)((double)t.a * p.x + (double)t.c * p.y + t.tx),
+  					 	(float)((double)t.b * p.x + (double)t.d * p.y + t.ty)
+  					 };
+	}
+
+	Rect RectApplyAffineTransform(const Rect& r, const AffineTransform& t);
+	
+	static int RectContainsPoint(const Rect& r, const Point& p)
+	{
+		return p.x >= r.origin.x && p.x <= (r.origin.x + r.size.width) && p.y >= r.origin.y && p.y <= (r.origin.y + r.size.height);
+	}
+
+#endif //PLATFORM(IPHONE)
 	
 	static inline Vector2 Vector2Make(float x, float y)
 	{

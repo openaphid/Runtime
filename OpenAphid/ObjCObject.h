@@ -21,6 +21,10 @@ limitations under the License.
 #include "wtf/PassRefPtr.h"
 #include "wtf/RefCounted.h"
 
+#if !PLATFORM(IPHONE)
+#error ObjCObject is only designed for iPhone platform
+#endif
+
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
 #endif

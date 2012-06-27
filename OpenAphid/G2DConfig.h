@@ -148,7 +148,8 @@ limitations under the License.
 #if defined(__ARM_NEON__) || TARGET_IPHONE_SIMULATOR || defined(__MAC_OS_X_VERSION_MAX_ALLOWED)
 #define CC_USES_VBO 1
 #else
-#define CC_USES_VBO 0
+#define CC_USES_VBO 1
+//TODO VBO is always enabled in OpenAphid
 #endif
 #endif
 

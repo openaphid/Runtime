@@ -45,6 +45,7 @@ namespace Aphid {
 		
 		static bool s_develop_mode;
 		
+		static void createInstance();
 		static OAGlobalObject* sharedInstance();
 		static void destroyInstance();
 		

@@ -25,6 +25,7 @@ limitations under the License.
 #include <WTFString.h>
 #include <StringHash.h>
 
+#if PLATFORM(IPHONE)
 #ifdef __OBJC__
 @class NSOperationQueue;
 @class NSMutableData;
@@ -35,7 +36,8 @@ class NSOperationQueue;
 class NSMutableData;
 class NSData;
 class OAHttpDownloadOperation;
-#endif
+#endif //__OBJC__
+#endif //PLATFORM(IPHONE)
 
 namespace Aphid {	
 	class XMLHttpRequest;
@@ -68,7 +70,10 @@ namespace Aphid {
 		
 		HttpHeaderMap& responseHeaders() {return m_responseHeaders;}
 		
+#if PLATFORM(IPHONE)
 		void appendData(NSData* data);
+#endif
+		
 		unsigned dataLength() const;
 		
 		Aphid::String responseText();
@@ -86,7 +91,14 @@ namespace Aphid {
 		long long m_expectedContentLength;
 		Aphid::String m_mimeType;
 		Aphid::String m_encoding;
+		
+#if PLATFORM(IPHONE)
 		NSMutableData* m_data; //TODO: use a platform independent data type		
+#elif PLATFORM(ANDROID)
+		//TODO: P0
+#else
+#error Unsupported platform
+#endif
 		Aphid::String m_text;
 		bool m_sealed;
 	};
@@ -107,15 +119,20 @@ namespace Aphid {
 		
 		HttpResponse* response() const {return m_response.get();}
 		
+#if PLATFORM(IPHONE)
 		OAHttpDownloadOperation* operation() const {return m_operation;}
 		void setOperation(OAHttpDownloadOperation* operation) {m_operation = operation;}
+#endif
 		
 	protected:
 		HttpDownload();
 		
 		XMLHttpRequest* m_request;
 		RefPtr<HttpResponse> m_response;
+		
+#if PLATFORM(IPHONE)
 		OAHttpDownloadOperation* m_operation;
+#endif
 	};
 	
 	class HttpDownloadManager : ATFNoncopyable::Noncopyable {
@@ -131,7 +148,9 @@ namespace Aphid {
 		
 		HttpDownloadManager();
 		
+#if PLATFORM(IPHONE)
 		NSOperationQueue* m_queue;
+#endif
 	};
 }
 

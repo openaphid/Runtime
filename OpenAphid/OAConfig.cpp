@@ -55,7 +55,7 @@ namespace Aphid {
 	void RefLeakCounter::increaseRef(const char* name)
 	{
 		LeakHash::iterator it = s_leak_hash.find(name);
-		RefLeakCounter* c;
+		RefLeakCounter* c = 0;
 		if (it == s_leak_hash.end()) {
 			c = new RefLeakCounter(name);
 			s_leak_hash.add(name, c);

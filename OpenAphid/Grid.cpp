@@ -44,11 +44,14 @@ namespace Aphid {
 		unsigned long POTWide = ccNextPOT(s.width);
 		unsigned long POTHigh = ccNextPOT(s.height);
 		
+/*
 #ifdef __IPHONE_OS_VERSION_MAX_ALLOWED		
 		CCTexture2DPixelFormat format = director->pixelFormat();
 #else
 		CCTexture2DPixelFormat format = kCCTexture2DPixelFormat_RGBA8888;
 #endif
+*/
+		CCTexture2DPixelFormat format = director->pixelFormat();
 		
 		void *data = calloc((int)(POTWide * POTHigh * 4), 1);
 		if( ! data ) {

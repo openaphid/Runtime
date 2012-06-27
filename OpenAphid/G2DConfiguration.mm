@@ -175,42 +175,4 @@ namespace Aphid {
     NSArray *extensionsNames = [extensionsString componentsSeparatedByString:@" "];
     return [extensionsNames containsObject: [NSString stringWithCString:searchName encoding:NSASCIIStringEncoding]];
 	}
-	
-	GLint G2DConfiguration::maxTextureSize()
-	{
-		if (!s_inited)
-			initConfiguration();
-		return s_maxTextureSize;
-	}
-	
-	GLint G2DConfiguration::maxModelviewStackDepth()
-	{
-		if (!s_inited)
-			initConfiguration();
-		return s_maxModelviewStackDepth;
-	}
-	bool G2DConfiguration::supportsNPOT()
-	{
-		if (!s_inited)
-			initConfiguration();
-		return s_supportsNPOT;
-	}
-	bool G2DConfiguration::supportsPVRTC()
-	{
-		if (!s_inited)
-			initConfiguration();
-		return s_supportsPVRTC;
-	}
-	bool G2DConfiguration::supportsBGRA8888()
-	{
-		if (!s_inited)
-			initConfiguration();
-		return s_supportsBGRA8888;
-	}
-	bool G2DConfiguration::supportsDiscardFramebuffer()
-	{
-		if (!s_inited)
-			initConfiguration();
-		return s_supportsDiscardFramebuffer;
-	}
 }

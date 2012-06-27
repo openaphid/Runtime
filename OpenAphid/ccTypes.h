@@ -44,7 +44,8 @@ limitations under the License.
 #define OPENAPHID_G2D_GL_TYPES_H
 
 #include "OAData.h"
-#include <OpenGLES/ES1/gl.h>
+
+#include "OpenGLES.inc.h"
 
 typedef struct _ccColor3B
 {

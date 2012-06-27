@@ -274,7 +274,7 @@ namespace Aphid {
 			} else {
 				child->removeFromParentAndCleanup(false);
 				if (OAGlobalObject::s_develop_mode)
-					Diagnostic::warn(formatUString("Adding a subnode which already has a parent node."));
+					Diagnostic::warn(String::format("Adding a subnode which already has a parent node."));
 			}
 		}
 		
@@ -640,7 +640,7 @@ namespace Aphid {
   {
 	  AffineTransform t = nodeToParentTransform();
 		
-	  for (Node *p = m_parent; p != nil; p = p->parent())
+	  for (Node *p = m_parent; p != 0; p = p->parent())
 		  t = AffineTransformConcat(t, p->nodeToParentTransform());
 		
 	  return t;
@@ -796,6 +796,7 @@ namespace Aphid {
 					break;
 				default:
 					oa_error("unknown event flag: %d", flag);
+					break;
 			}
 #endif
 		TouchEventTarget::handleTouchEvent(flag, touches, event);
