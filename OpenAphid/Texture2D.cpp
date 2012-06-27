@@ -25,9 +25,6 @@ limitations under the License.
 
 #include "runtime/AJObject.h"
 
-#include <CoreGraphics/CGContext.h>
-#include <CoreGraphics/CGBitmapContext.h>
-
 namespace Aphid {
 	TextAlignment toTextAlignment(const AJ::UString& s)
 	{
@@ -86,13 +83,6 @@ namespace Aphid {
 			glDeleteTextures(1, &m_name);
 		
 		LEAK_DETECT_DEC("Texture2D");
-	}
-	
-	PassRefPtr<Texture2D> Texture2D::create(CGImageRef imageRef, bool antialias)
-	{
-		RefPtr<Texture2D> texture = create(antialias);
-		texture->initWithImage(imageRef);
-		return texture.release();
 	}
 	
 	ATF::PassRefPtr<Texture2D> Texture2D::create(const AJ::UString &url, bool antialias)
@@ -254,7 +244,7 @@ namespace Aphid {
 	//--------------------------------------------------------------------------------------------------------------------
 	//Private
 	
-	void Texture2D::initWithData(const void* data, CCTexture2DPixelFormat pixelFormat, int width, int height, const Size& size)
+	void Texture2D::initWithData(const void* data, CCTexture2DPixelFormat pixelFormat, int width, int height, const Size& size, bool isPOTData)
 	{
 		glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 		glGenTextures(1, &m_name);
@@ -270,26 +260,56 @@ namespace Aphid {
 		switch(pixelFormat)
 		{
 			case kCCTexture2DPixelFormat_RGBA8888:
+				if (isPOTData)
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) width, (GLsizei) height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+				else {
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) width, (GLsizei) height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+				}
 				break;
 			case kCCTexture2DPixelFormat_RGBA4444:
+				if (isPOTData)
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) width, (GLsizei) height, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, data);
+				else {
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) width, (GLsizei) height, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, 0);
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, data);
+				}
 				break;
 			case kCCTexture2DPixelFormat_RGB5A1:
+				if (isPOTData)
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) width, (GLsizei) height, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, data);
+				else {
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei) width, (GLsizei) height, 0, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, 0);
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1, data);
+				}
 				break;
 			case kCCTexture2DPixelFormat_RGB565:
+				if (isPOTData)
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei) width, (GLsizei) height, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, data);
+				else {
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (GLsizei) width, (GLsizei) height, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, 0);
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, data);
+				}
 				break;
 			case kCCTexture2DPixelFormat_AI88:
+				if (isPOTData)
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, (GLsizei) width, (GLsizei) height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, data);
+				else {
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, (GLsizei) width, (GLsizei) height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, 0);
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, data);
+				}
 				break;
 			case kCCTexture2DPixelFormat_A8:
+				if (isPOTData)
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, (GLsizei) width, (GLsizei) height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, data);
+				else {
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, (GLsizei) width, (GLsizei) height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, 0);
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, size.width, size.height, GL_ALPHA, GL_UNSIGNED_BYTE, data);
+				}
 				break;
 			default:
 				oa_error("Unknown pixel format: %d", static_cast<int>(pixelFormat));
-				
+				break;
 		}
 		
 		m_size = size;
@@ -302,158 +322,6 @@ namespace Aphid {
 		m_hasPremultipliedAlpha = false;
 	}
 	
-	void Texture2D::initWithImage(CGImageRef CGImage)
-	{
-		int				POTWide, POTHigh;
-		CGContextRef			context = nil;
-		void*					data = nil;;
-		CGColorSpaceRef			colorSpace;
-		void*					tempData;
-		unsigned int*			inPixel32;
-		unsigned short*			outPixel16;
-		bool					hasAlpha;
-		CGImageAlphaInfo		info;
-		Size					imageSize;
-		CCTexture2DPixelFormat	pixelFormat;
-		
-		if(CGImage == NULL) {
-			ASSERT_NOT_REACHED();
-		}
-		
-#if CC_TEXTURE_NPOT_SUPPORT
-		if( G2DConfiguration::supportsNPOT()] ) {
-			POTWide = CGImageGetWidth(CGImage);
-			POTHigh = CGImageGetHeight(CGImage);
-			
-		} else 
-#endif
-		{
-			POTWide = ccNextPOT(CGImageGetWidth(CGImage));
-			POTHigh = ccNextPOT(CGImageGetHeight(CGImage));
-		}
-		
-		int maxTextureSize = G2DConfiguration::maxTextureSize();
-		if( POTHigh > maxTextureSize || POTWide > maxTextureSize ) {
-			oa_error("WARNING: Image (%lu x %lu) is bigger than the supported %ld x %ld",
-							 (long)POTWide, (long)POTHigh,
-							 (long)maxTextureSize, (long)maxTextureSize);
-			ASSERT_NOT_REACHED();
-			return;
-		}
-		
-		info = CGImageGetAlphaInfo(CGImage);
-		hasAlpha = ((info == kCGImageAlphaPremultipliedLast) || (info == kCGImageAlphaPremultipliedFirst) || (info == kCGImageAlphaLast) || (info == kCGImageAlphaFirst) ? true : false);
-		
-		size_t bpp = CGImageGetBitsPerComponent(CGImage);
-		colorSpace = CGImageGetColorSpace(CGImage);
-		
-		if(colorSpace) {
-			if(hasAlpha || bpp >= 8)
-				pixelFormat = Texture2D::defaultAlphaPixelFormat();
-			else {
-				oa_info("Texture2D: Using RGB565 texture since image has no alpha");
-				pixelFormat = kCCTexture2DPixelFormat_RGB565;
-			}
-		} else {
-			// NOTE: No colorspace means a mask image
-			oa_info("Texture2D: Using A8 texture since image is a mask");
-			pixelFormat = kCCTexture2DPixelFormat_A8;
-		}
-		
-		imageSize = CGSizeMake(CGImageGetWidth(CGImage), CGImageGetHeight(CGImage));
-		
-		// Create the bitmap graphics context
-		
-		switch(pixelFormat) {          
-			case kCCTexture2DPixelFormat_RGBA8888:
-			case kCCTexture2DPixelFormat_RGBA4444:
-			case kCCTexture2DPixelFormat_RGB5A1:
-				colorSpace = CGColorSpaceCreateDeviceRGB();
-				data = malloc(POTHigh * POTWide * 4);
-				info = hasAlpha ? kCGImageAlphaPremultipliedLast : kCGImageAlphaNoneSkipLast; 
-				//			info = kCGImageAlphaPremultipliedLast;  // issue #886. This patch breaks BMP images.
-				context = CGBitmapContextCreate(data, POTWide, POTHigh, 8, 4 * POTWide, colorSpace, info | kCGBitmapByteOrder32Big);				
-				CGColorSpaceRelease(colorSpace);
-				break;
-				
-			case kCCTexture2DPixelFormat_RGB565:
-				colorSpace = CGColorSpaceCreateDeviceRGB();
-				data = malloc(POTHigh * POTWide * 4);
-				info = kCGImageAlphaNoneSkipLast;
-				context = CGBitmapContextCreate(data, POTWide, POTHigh, 8, 4 * POTWide, colorSpace, info | kCGBitmapByteOrder32Big);
-				CGColorSpaceRelease(colorSpace);
-				break;
-			case kCCTexture2DPixelFormat_A8:
-				data = malloc(POTHigh * POTWide);
-				info = kCGImageAlphaOnly; 
-				context = CGBitmapContextCreate(data, POTWide, POTHigh, 8, POTWide, NULL, info);
-				break;                    
-			default:
-				oa_error("Invalid pixel format");
-				ASSERT_NOT_REACHED();
-		}
-		
-		
-		CGContextClearRect(context, CGRectMake(0, 0, POTWide, POTHigh));
-		CGContextTranslateCTM(context, 0, POTHigh - imageSize.height);
-		CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(CGImage), CGImageGetHeight(CGImage)), CGImage);
-		
-		// Repack the pixel data into the right format
-		
-		if(pixelFormat == kCCTexture2DPixelFormat_RGB565) {
-			//Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRGGGGGGBBBBB"
-			tempData = malloc(POTHigh * POTWide * 2);
-			inPixel32 = (unsigned int*)data;
-			outPixel16 = (unsigned short*)tempData;
-			for(unsigned int i = 0; i < POTWide * POTHigh; ++i, ++inPixel32)
-				*outPixel16++ = ((((*inPixel32 >> 0) & 0xFF) >> 3) << 11) | ((((*inPixel32 >> 8) & 0xFF) >> 2) << 5) | ((((*inPixel32 >> 16) & 0xFF) >> 3) << 0);
-			free(data);
-			data = tempData;
-			
-		}
-		else if (pixelFormat == kCCTexture2DPixelFormat_RGBA4444) {
-			//Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRGGGGBBBBAAAA"
-			tempData = malloc(POTHigh * POTWide * 2);
-			inPixel32 = (unsigned int*)data;
-			outPixel16 = (unsigned short*)tempData;
-			for(unsigned int i = 0; i < POTWide * POTHigh; ++i, ++inPixel32)
-				*outPixel16++ = 
-				((((*inPixel32 >> 0) & 0xFF) >> 4) << 12) | // R
-				((((*inPixel32 >> 8) & 0xFF) >> 4) << 8) | // G
-				((((*inPixel32 >> 16) & 0xFF) >> 4) << 4) | // B
-				((((*inPixel32 >> 24) & 0xFF) >> 4) << 0); // A
-			
-			
-			free(data);
-			data = tempData;
-			
-		}
-		else if (pixelFormat == kCCTexture2DPixelFormat_RGB5A1) {
-			//Convert "RRRRRRRRRGGGGGGGGBBBBBBBBAAAAAAAA" to "RRRRRGGGGGBBBBBA"
-			tempData = malloc(POTHigh * POTWide * 2);
-			inPixel32 = (unsigned int*)data;
-			outPixel16 = (unsigned short*)tempData;
-			for(unsigned int i = 0; i < POTWide * POTHigh; ++i, ++inPixel32)
-				*outPixel16++ = 
-				((((*inPixel32 >> 0) & 0xFF) >> 3) << 11) | // R
-				((((*inPixel32 >> 8) & 0xFF) >> 3) << 6) | // G
-				((((*inPixel32 >> 16) & 0xFF) >> 3) << 1) | // B
-				((((*inPixel32 >> 24) & 0xFF) >> 7) << 0); // A
-			
-			
-			free(data);
-			data = tempData;
-		}
-		
-		initWithData(data, pixelFormat, POTWide, POTHigh, imageSize);
-		
-		// should be after calling super init
-		m_hasPremultipliedAlpha = (info == kCGImageAlphaPremultipliedLast || info == kCGImageAlphaPremultipliedFirst);
-		
-		CGContextRelease(context);
-		releaseData(data);
-	}
-
 	///-------------------------------------------------------------------------------------------------------------------
 	/// Grabber
 	Grabber::Grabber()

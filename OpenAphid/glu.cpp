@@ -45,11 +45,13 @@ limitations under the License.
 
 #include <config.h>
 #include "glu.h"
-#include <OpenGLES/ES1/gl.h>
+
 #include <math.h>
 #include "OAData.h"
 #include "ccTypes.h"
 #include "G2DMacros.h"
+
+#include "OpenGLES.inc.h"
 
 namespace Aphid {
   void gluPerspective(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)

@@ -32,6 +32,14 @@ limitations under the License.
 
 #include "Touch.h"
 
+#if PLATFORM(IPHONE)
+#ifdef __OBJC__
+@class UITouch;
+#else
+class UITouch;
+#endif
+#endif
+
 namespace AJ {
 	class MarkStack;
 }
@@ -175,14 +183,14 @@ namespace Aphid {
 		Point convertToWorldSpaceAR(const Point& nodePoint);
 		Point convertToWindowSpace(const Point& nodePoint);
 		
-		//TODO: touch
-#ifdef __OBJC__
-		Point convertTouchToNodeSpace(id touch);
-		Point convertTouchToNodeSpaceAR(id touch);
+#if PLATFORM(IPHONE)
+		Point convertTouchToNodeSpace(UITouch* touch);
+		Point convertTouchToNodeSpaceAR(UITouch* touch);
+#elif PLATFORM(ANDROID)
+//#warning TODO: convert touch to node coordination system
 #else
-		Point convertTouchToNodeSpace(void* touch);
-		Point convertTouchToNodeSpaceAR(void* touch);
-#endif
+#error Unsupported platform
+#endif //PLATFORM(IPHONE)
 		
 		virtual RGBAProtocol* toRGBAProtocol() {return 0;}
 		virtual TextureProtocol* toTextureProtocol() {return 0;}

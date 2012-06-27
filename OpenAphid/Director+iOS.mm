@@ -16,7 +16,7 @@ limitations under the License.
  */
 
 #include <config.h>
-#include "Director.h"
+#include "Director+iOS.h"
 #include "Node.h"
 #include "Scene.h"
 
@@ -75,6 +75,32 @@ limitations under the License.
 @end
 
 namespace Aphid {
+	///-------------------------------------------------------------------------------------------------------------------
+	/// Director iOS Specific Implementations
+	void Director::setGLView(id glView)
+  {
+	  //TODO: check equivalent?
+	  m_glView = ObjCObject::create(glView);
+
+	  m_winSizeInPixels = m_winSizeInPoints = [glView bounds].size;
+
+	  setGLDefaultValues();
+  }
+
+	CCTexture2DPixelFormat Director::pixelFormat()
+  {
+	  OAGLViewPixelFormat pixelFormat = [m_glView->impl() pixelFormat];
+		switch (pixelFormat) {
+			case OAGLViewPixelFormatRGB565:
+				return kCCTexture2DPixelFormat_RGB565;
+			case OAGLViewPixelFormatRGBA8:
+				return kCCTexture2DPixelFormat_RGBA8888;
+			default:
+				oa_error("Unknown pixel format from glview: %d", pixelFormat);
+				return kCCTexture2DPixelFormat_RGB565;
+			
+		}
+  }
 	
   ///-------------------------------------------------------------------------------------------------------------------
 	
@@ -101,98 +127,9 @@ namespace Aphid {
 	
   void DirectorIOS::drawScene()
   {
-	  /* calculate "global" dt */
-	  calculateDeltaTime();
-		
-	  /* tick before glClear: issue #533 */
-	  if (!m_paused) {
-		  OAGlobalObject::sharedInstance()->namespaceG2D()->scheduler()->tick(dt);
-	  }
-		
-	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-	  /* to avoid flickr, nextScene MUST be here: after tick and before draw.
-		 TODO: Which bug is this one. It seems that it can't be reproduced with v0.9 */
-	  if (m_nextScene)
-		  setNextScene();
-		
-	  glPushMatrix();
-		
-	  applyOrientation();
-		
-	  // By default enable VertexArray, ColorArray, TextureCoordArray and Texture2D
-		
-		CC_ENABLE_DEFAULT_GL_STATES();
-		
-	  /* draw the scene */
-	  if (m_runningScene)
-		  m_runningScene->visit();
-		
-	  if (m_notificationNode)
-		  m_notificationNode->visit();
-		
-	  if (m_displayFPS)
-		  showFPS();
-		
-#if CC_ENABLE_PROFILERS
-		[self showProfilers];
-#endif
-		
-	  CC_DISABLE_DEFAULT_GL_STATES();
-		
-	  glPopMatrix();
-		
-	  m_totalFrames++;
+	  Director::drawScene();
 		
 	  [m_glView->impl() swapBuffers];
-  }
-	
-  void DirectorIOS::setProjection(ccDirectorProjection projection)
-  {
-	  Size size = m_winSizeInPixels;
-		
-	  switch (projection) {
-		  case kCCDirectorProjection2D:
-	      glViewport(0, 0, size.width, size.height);
-	      glMatrixMode(GL_PROJECTION);
-	      glLoadIdentity();
-	      ccglOrtho(0, size.width, 0, size.height, -1024 * G2D_CONTENT_SCALE_FACTOR(), 1024 * G2D_CONTENT_SCALE_FACTOR());
-	      glMatrixMode(GL_MODELVIEW);
-	      glLoadIdentity();
-	      break;
-				
-		  case kCCDirectorProjection3D:
-		  {
-			  float zeye = zEye();
-				
-			  glViewport(0, 0, size.width, size.height);
-			  glMatrixMode(GL_PROJECTION);
-			  glLoadIdentity();
-			  //			gluPerspective(60, (GLfloat)size.width/size.height, zeye-size.height/2, zeye+size.height/2 );
-			  gluPerspective(60, (GLfloat) size.width / size.height, 0.5f, 1500);
-				
-			  glMatrixMode(GL_MODELVIEW);
-			  glLoadIdentity();
-			  gluLookAt(size.width / 2, size.height / 2, zeye,
-									size.width / 2, size.height / 2, 0,
-									0.0f, 1.0f, 0.0f);
-			  break;
-		  }
-				
-		  case kCCDirectorProjectionCustom:
-	      OA_TODO();
-	      /*
-				 if( projectionDelegate_ )
-				 [projectionDelegate_ updateProjection];
-				 */
-	      break;
-				
-		  default:
-	      oa_error("Director: unrecognized projecgtion");
-	      break;
-	  }
-		
-	  m_projection = projection;
   }
 	
   void DirectorIOS::setGLView(id view)
@@ -204,26 +141,6 @@ namespace Aphid {
 			
 		  if (G2D_CONTENT_SCALE_FACTOR() != 1)
 			  updateContentScaleFactor();
-	  }
-  }
-	
-  float DirectorIOS::contentScaleFactor()
-  {
-	  return NamespaceG2D::s_content_scale_factor;
-  }
-	
-  void DirectorIOS::setContentScaleFactor(float scaleFactor)
-  {
-	  if (scaleFactor != NamespaceG2D::s_content_scale_factor) {
-			
-		  NamespaceG2D::s_content_scale_factor = scaleFactor;
-		  m_winSizeInPixels = toPixels(m_winSizeInPoints);
-			
-		  if (m_glView->impl() != nil)
-			  updateContentScaleFactor();
-			
-		  // update projection
-		  setProjection(m_projection);
 	  }
   }
 	
@@ -284,78 +201,6 @@ namespace Aphid {
 	  setProjection(m_projection);
   }
 	
-  Point DirectorIOS::convertToGL(const Point& uiPoint)
-  {
-	  Size s = m_winSizeInPoints;
-	  float newY = s.height - uiPoint.y;
-	  float newX = s.width - uiPoint.x;
-		
-	  Point ret = PointZero;
-	  switch (m_deviceOrientation) {
-		  case kCCDeviceOrientationPortrait:
-	      ret = PointMake( uiPoint.x, newY );
-	      break;
-		  case kCCDeviceOrientationPortraitUpsideDown:
-	      ret = PointMake(newX, uiPoint.y);
-	      break;
-		  case kCCDeviceOrientationLandscapeLeft:
-	      ret.x = uiPoint.y;
-	      ret.y = uiPoint.x;
-	      break;
-		  case kCCDeviceOrientationLandscapeRight:
-	      ret.x = newY;
-	      ret.y = newX;
-	      break;
-		  default:
-	      oa_error("invalid orientation: %d", m_deviceOrientation);
-	  }
-	  return ret;
-  }
-	
-  Point DirectorIOS::convertToUI(const Point& glPoint)
-  {
-	  Size winSize = m_winSizeInPoints;
-	  int oppositeX = winSize.width - glPoint.x;
-	  int oppositeY = winSize.height - glPoint.y;
-	  CGPoint uiPoint = CGPointZero;
-	  switch (m_deviceOrientation) {
-		  case kCCDeviceOrientationPortrait:
-	      uiPoint = PointMake(glPoint.x, oppositeY);
-	      break;
-		  case kCCDeviceOrientationPortraitUpsideDown:
-	      uiPoint = PointMake(oppositeX, glPoint.y);
-	      break;
-		  case kCCDeviceOrientationLandscapeLeft:
-	      uiPoint = PointMake(glPoint.y, glPoint.x);
-	      break;
-		  case kCCDeviceOrientationLandscapeRight:
-	      // Can't use oppositeX/Y because x/y are flipped
-	      uiPoint = PointMake(winSize.width - glPoint.y, winSize.height - glPoint.x);
-	      break;
-		  default:
-	      oa_error("invalid orientation: %d", m_deviceOrientation);
-	  }
-	  return uiPoint;
-  }
-	
-  Size DirectorIOS::winSize() const
-  {
-	  Size s = m_winSizeInPoints;
-		
-	  if (m_deviceOrientation == kCCDeviceOrientationLandscapeLeft || m_deviceOrientation == kCCDeviceOrientationLandscapeRight) {
-		  // swap x,y in landscape mode
-		  Size tmp = s;
-		  s.width = tmp.height;
-		  s.height = tmp.width;
-	  }
-	  return s;
-  }
-	
-  Size DirectorIOS::winSizeInPixels() const
-  {
-		return toPixels(winSize());
-  }
-	
   void DirectorIOS::setDeviceOrientation(ccDeviceOrientation orientation)
   {
 	  if (m_deviceOrientation != orientation) {
@@ -377,40 +222,6 @@ namespace Aphid {
 		      oa_error("Unknown device orientation");
 		      break;
 		  }
-	  }
-  }
-	
-  void DirectorIOS::applyOrientation()
-  {
-	  Size s = m_winSizeInPixels;
-	  float w = s.width / 2;
-	  float h = s.height / 2;
-		
-	  // TODO it's using hardcoded values.
-	  // What if the the screen size changes in the future?
-	  switch (m_deviceOrientation) {
-		  case kCCDeviceOrientationPortrait:
-	      // nothing
-	      break;
-		  case kCCDeviceOrientationPortraitUpsideDown:
-	      // upside down
-	      glTranslatef(w, h, 0);
-	      glRotatef(180, 0, 0, 1);
-	      glTranslatef(-w, -h, 0);
-	      break;
-		  case kCCDeviceOrientationLandscapeLeft:
-	      glTranslatef(w, h, 0);
-	      glRotatef(-90, 0, 0, 1);
-	      glTranslatef(-h, -w, 0);
-	      break;
-		  case kCCDeviceOrientationLandscapeRight:
-	      glTranslatef(w, h, 0);
-	      glRotatef(90, 0, 0, 1);
-	      glTranslatef(-h, -w, 0);
-	      break;
-		  default:
-	      oa_error("Unknown orientation");
-	      break;
 	  }
   }
 	

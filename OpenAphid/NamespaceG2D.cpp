@@ -22,6 +22,14 @@ limitations under the License.
 #include "AJNamespaceG2D.h"
 #include "OAUtil.h"
 
+#if PLATFORM(IPHONE)
+#include "Director+iOS.h"
+#elif PLATFORM(ANDROID)
+#include "Director+Android.h"
+#else
+#error Unsupported platform
+#endif
+
 namespace Aphid {
 	using namespace AJ;
 	
@@ -42,7 +50,14 @@ namespace Aphid {
 	{
 		ASSERT(!m_scheduler);
 		
+#if PLATFORM(IPHONE)
 		m_director = DirectorIOS::create();
+#elif PLATFORM(ANDROID)
+		m_director = DirectorAndroid::create();
+#else
+#error Unsupported platform
+#endif
+		
 		m_scheduler = Scheduler::create();
 		m_actionManager = ActionManager::create();
 		m_defaultFont = Font::create(18);

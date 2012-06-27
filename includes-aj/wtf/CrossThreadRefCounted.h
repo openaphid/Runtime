@@ -109,7 +109,11 @@ namespace ATF {
 
 #ifndef NDEBUG
         bool isOwnedByCurrentThread() const {
+#if OS(ANDROID)
+          return !m_threadId || m_threadId == currentThread() || ((isMainThread() || pthread_main_np()));
+#else
             return !m_threadId || m_threadId == currentThread() || ((isMainThread() || pthread_main_np()) && WebCoreWebThreadIsLockedOrDisabled());
+#endif
         }
 #endif
 

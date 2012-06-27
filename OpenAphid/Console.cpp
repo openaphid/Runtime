@@ -27,6 +27,10 @@ limitations under the License.
 
 #include <time.h>
 
+#if PLATFORM(ANDROID)
+#include <OAAndroidLog.h>
+#endif
+
 namespace Aphid {
 	using namespace AJ;
 	
@@ -67,15 +71,52 @@ namespace Aphid {
 		addMessage(MessageType_Log, MessageLevel_Warn, stack);
 	}
 	
+#if PLATFORM(ANDROID)
+	static inline android_LogPriority convert_android_log_level(MessageLevel flag)
+	{
+		android_LogPriority level = ANDROID_LOG_DEBUG;
+		switch (flag) {
+		case MessageLevel_Debug:
+			level = ANDROID_LOG_DEBUG;
+			break;
+		case MessageLevel_Log:
+		case MessageLevel_Info:
+			level = ANDROID_LOG_INFO;
+			break;
+		case MessageLevel_Warn:
+			level = ANDROID_LOG_WARN;
+			break;
+		case MessageLevel_Error:
+			level = ANDROID_LOG_ERROR;
+			break;
+		default:
+			level = ANDROID_LOG_INFO;
+			break;
+		}
+		return level;
+	}
+#endif
+	
 	void Console::trace(ScriptCallStack& stack)
 	{
 		//addMessage(MessageType_Trace, MessageLevel_Debug, stack);
+#if PLATFORM(ANDROID)
+		__android_log_print(ANDROID_LOG_INFO, AJ_ANDROID_TAG, "Stack Trace:\n");
+#else
 		printf("Stack Trace:\n");
+#endif
+		
     for (unsigned i = 0; i < stack.size(); ++i) {
 			const ScriptCallFrame& frame = stack.frame(i);
+#if PLATFORM(ANDROID)
+			__android_log_print(ANDROID_LOG_INFO, AJ_ANDROID_TAG, "\t%s, [%s: %d]\n", frame.functionName().UTF8String().data(), frame.sourceURLString().UTF8String().data(), frame.lineNO());
+#else
 			printf("\t%s, [%s: %d]\n", frame.functionName().UTF8String().data(), frame.sourceURLString().UTF8String().data(), frame.lineNO());
+#endif
     }
+#if !PLATFORM(ANDROID)
 		fflush(stdout);
+#endif
 	}
 	
 	void Console::assertCondition(bool condition, ScriptCallStack& stack)
@@ -89,10 +130,12 @@ namespace Aphid {
 		UNUSED_PARAM(type);
 		
 		const ScriptCallFrame& lastFrame = stack.frame(0);
+		
+#if !PLATFORM(ANDROID)
 		time_t now = time(NULL);
 		char nowstr[64];
-		
 		strftime(nowstr, 64, "%D,%T", gmtime(&now));
+#endif
 		
 		const char* levelString;
 		switch(level) {
@@ -122,17 +165,22 @@ namespace Aphid {
 		for (unsigned int i = 0; i < count; ++i) {
 			output.append(String::format("%s ", lastFrame.argAt(i).get().toString(stack.execState()).UTF8String().data()));
 		}
+		
+#if PLATFORM(ANDROID)
+		__android_log_print(convert_android_log_level(level), AJ_ANDROID_TAG, "%s", output.utf8().data());
+#else
 		printf("%s %s", nowstr, output.utf8().data());
 		printf("\n");
 		fflush(stdout);
+#endif
 		
 		if (level >= MessageLevel_Warn) {
 			switch(level) {
 				case MessageLevel_Warn:
-					Diagnostic::warn(toUString(output), false);
+					Diagnostic::warn(output, false);
 					break;
 				case MessageLevel_Error:
-					Diagnostic::error(toUString(output), false);
+					Diagnostic::error(output, false);
 					break;
 				default:
 					break;

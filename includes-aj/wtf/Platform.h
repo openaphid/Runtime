@@ -231,11 +231,14 @@ limitations under the License.
 #define WTF_ARM_ARCH_AT_LEAST(N) (CPU(ARM) && WTF_ARM_ARCH_VERSION >= N)
 
 /* Set WTF_ARM_ARCH_VERSION */
+/*
 #if   defined(__ARM_ARCH_4__) \
     || defined(__ARM_ARCH_4T__) \
     || defined(__MARM_ARMV4__) \
     || defined(_ARMV4I_)
 #define WTF_ARM_ARCH_VERSION 4
+
+#error arm v4
 
 #elif defined(__ARM_ARCH_5__) \
     || defined(__ARM_ARCH_5T__) \
@@ -244,6 +247,38 @@ limitations under the License.
     || defined(__ARM_ARCH_5TEJ__) \
     || defined(__MARM_ARMV5__)
 #define WTF_ARM_ARCH_VERSION 5
+
+#error arm v5
+
+#elif defined(__ARM_ARCH_6__) \
+    || defined(__ARM_ARCH_6J__) \
+    || defined(__ARM_ARCH_6K__) \
+    || defined(__ARM_ARCH_6Z__) \
+    || defined(__ARM_ARCH_6ZK__) \
+    || defined(__ARM_ARCH_6T2__) \
+    || defined(__ARMV6__)
+#define WTF_ARM_ARCH_VERSION 6
+#error arm v6
+
+#elif defined(__ARM_ARCH_7A__) \
+    || defined(__ARM_ARCH_7R__)
+#define WTF_ARM_ARCH_VERSION 7
+
+#error arm v7
+
+// RVCT sets _TARGET_ARCH_ARM 
+#elif defined(__TARGET_ARCH_ARM)
+#define WTF_ARM_ARCH_VERSION __TARGET_ARCH_ARM
+
+#else
+#define WTF_ARM_ARCH_VERSION 0
+
+#endif
+*/
+
+#if defined(__ARM_ARCH_7A__) \
+    || defined(__ARM_ARCH_7R__)
+#define WTF_ARM_ARCH_VERSION 7
 
 #elif defined(__ARM_ARCH_6__) \
     || defined(__ARM_ARCH_6J__) \
@@ -254,11 +289,21 @@ limitations under the License.
     || defined(__ARMV6__)
 #define WTF_ARM_ARCH_VERSION 6
 
-#elif defined(__ARM_ARCH_7A__) \
-    || defined(__ARM_ARCH_7R__)
-#define WTF_ARM_ARCH_VERSION 7
+#elif defined(__ARM_ARCH_5__) \
+    || defined(__ARM_ARCH_5T__) \
+    || defined(__ARM_ARCH_5E__) \
+    || defined(__ARM_ARCH_5TE__) \
+    || defined(__ARM_ARCH_5TEJ__) \
+    || defined(__MARM_ARMV5__)
+#define WTF_ARM_ARCH_VERSION 5
 
-/* RVCT sets _TARGET_ARCH_ARM */
+#elif   defined(__ARM_ARCH_4__) \
+    || defined(__ARM_ARCH_4T__) \
+    || defined(__MARM_ARMV4__) \
+    || defined(_ARMV4I_)
+#define WTF_ARM_ARCH_VERSION 4
+
+// RVCT sets _TARGET_ARCH_ARM 
 #elif defined(__TARGET_ARCH_ARM)
 #define WTF_ARM_ARCH_VERSION __TARGET_ARCH_ARM
 
@@ -650,9 +695,15 @@ limitations under the License.
     //OpenAphid hack, disable JIT for iOS
     #define WTF_USE_JSVALUE32_64 1
     #define ENABLE_INTERPRETER 1
-    #define ENABLE_JIT 0
     #define ENABLE_YARR 1
+#if OS(ANDROID)
     #define ENABLE_YARR_JIT 0
+    #define ENABLE_JIT 0
+#else //not ANDROID
+		#define ENABLE_YARR_JIT 0
+    #define ENABLE_JIT 0
+#endif //OS(ANDROID)
+
 #else
     // ARMv6; never use the JIT, use JSVALUE32_64 only if compiling with llvm.
     #define ENABLE_JIT 0
@@ -677,13 +728,19 @@ limitations under the License.
 #if PLATFORM(ANDROID)
 #define WTF_USE_PTHREADS 1
 #define WTF_PLATFORM_SGL 1
-#define USE_SYSTEM_MALLOC 1
+#define USE_SYSTEM_MALLOC 0
+#undef ENABLE_JAVA_BRIDGE
 #define ENABLE_JAVA_BRIDGE 1
 #define LOG_DISABLED 1
 /* Prevents Webkit from drawing the caret in textfields and textareas
    This prevents unnecessary invals. */
-#define ENABLE_TEXT_CARET 1
+#undef ENABLE_TEXT_CARET
+//#define ENABLE_TEXT_CARET 1
 #define ENABLE_JAVASCRIPT_DEBUGGER 0
+#undef HAVE_PTHREAD_RWLOCK
+#define HAVE_PTHREAD_RWLOCK 0
+#undef WTF_PLATFORM_CF
+#define WTF_PLATFORM_CF 0
 #endif
 
 #if PLATFORM(WIN)
@@ -1118,7 +1175,11 @@ on MinGW. See https://bugs.webkit.org/show_bug.cgi?id=29268 */
 /* Pick which allocator to use; we only need an executable allocator if the assembler is compiled in.
    On x86-64 we use a single fixed mmap, on other platforms we mmap on demand. */
 #if ENABLE(ASSEMBLER)
+#if OS(ANDROID)
+#define ENABLE_EXECUTABLE_ALLOCATOR_DEMAND 1
+#else
 #define ENABLE_EXECUTABLE_ALLOCATOR_FIXED 1
+#endif
 #endif
 
 #if !defined(ENABLE_PAN_SCROLLING) && OS(WINDOWS)
@@ -1186,6 +1247,10 @@ on MinGW. See https://bugs.webkit.org/show_bug.cgi?id=29268 */
 
 #if CPU(ARM_THUMB2)
 #define ENABLE_BRANCH_COMPACTION 1
+#endif
+
+#if PLATFORM(ANDROID)
+int pthread_main_np();
 #endif
 
 #endif /* WTF_Platform_h */

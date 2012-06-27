@@ -3,6 +3,21 @@ Runtime
 
 The core runtime of OpenAphid
 
+## System Requirement for iOS
+
+- iOS OS 4.0+
+
+- iPhone 3GS and later
+
+- iPod Touch 3rd generation and later
+
+## System Requirement for Android
+
+- Android OS 2.2+
+
+- ARMv7 processor only, will support ARMv5 in future
+
+
 ## Copyright and License
 
 ```

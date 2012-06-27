@@ -25,7 +25,11 @@ limitations under the License.
 #include "ccTypes.h"
 #include "Font.h"
 
+#if PLATFORM(IPHONE)
 #include <CoreGraphics/CGImage.h> //TODO: iOS platform dependent
+#elif PLATFORM(ANDROID)
+#include "OAJNIUtil.h"
+#endif
 
 #ifdef __OBJC__
 #import <UIKit/UIFont.h>
@@ -95,7 +99,9 @@ namespace Aphid {
 		static PassRefPtr<Texture2D> createWithString(const AJ::UString& content, const Size& dimensions, Font* font, TextAlignment alignment, LineBreakMode lineBreakMode);
 		static PassRefPtr<Texture2D> createWithString(const AJ::UString& content, const Size& dimensions, float fontSize);
 		
+#if PLATFORM(IPHONE)
 		static PassRefPtr<Texture2D> create(CGImageRef imageRef, bool antialias=true);
+#endif
 		static PassRefPtr<Texture2D> create(const void* data, CCTexture2DPixelFormat pixelFormat, int width, int height, const Size& size);
 		
 		//Getter and setters
@@ -143,8 +149,13 @@ namespace Aphid {
 			return adoptRef(new Texture2D(antialias));
 		}
 		
-		void initWithData(const void* data, CCTexture2DPixelFormat pixelFormat, int width, int height, const Size& size);
+		void initWithData(const void* data, CCTexture2DPixelFormat pixelFormat, int width, int height, const Size& size, bool isPOTData=true);
+
+#if PLATFORM(IPHONE)
 		void initWithImage(CGImageRef CGImage);
+#elif PLATFORM(ANDROID)
+		void initWithBitmap(jobject bitmap);
+#endif
 		
 	private:
 		GLuint m_name;

@@ -19,7 +19,7 @@ limitations under the License.
 #include "ActionTiledGrid.h"
 #include "ccTypes.h"
 #include "G2DMacros.h"
-#import "Node.h"
+#include "Node.h"
 
 namespace Aphid {
   static void shuffle(int *array, size_t len)

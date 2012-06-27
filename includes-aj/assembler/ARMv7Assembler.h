@@ -495,6 +495,8 @@ public:
         
         ConditionCS = ConditionHS,
         ConditionCC = ConditionLO,
+
+		Condition_ALL = 0xffff,
     } Condition;
 
     enum JumpType { JumpFixed, JumpNoCondition, JumpCondition, JumpNoConditionFixedSize, JumpConditionFixedSize, JumpTypeCount };
@@ -540,7 +542,8 @@ public:
     private:
         JmpSrc(int offset, JumpType type)
             : m_offset(offset)
-            , m_condition(0xffff)
+            //, m_condition(0xffff)
+			, m_condition(Condition_ALL)
             , m_type(type)
         {
             ASSERT(m_type == JumpFixed || m_type == JumpNoCondition || m_type == JumpNoConditionFixedSize);

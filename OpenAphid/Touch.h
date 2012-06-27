@@ -24,8 +24,14 @@ limitations under the License.
 #include "OAData.h"
 #include "DirectWrapper.h"
 
+#if PLATFORM(IPHONE)
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
+#endif
+#endif
+
+#if PLATFORM(ANDROID)
+#include <jni.h>
 #endif
 
 
@@ -37,7 +43,6 @@ namespace Aphid {
 	class AJTouchList;
 	
 	///-------------------------------------------------------------------------------------------------------------------
-	//TODO add previousLocation support in next release
 	class Touch : public ATF::RefCounted<Touch>, public DirectWrapper<AJTouch> {
 		typedef Touch Self;
 	public:
@@ -266,6 +271,14 @@ namespace Aphid {
 		bool m_userInteractionEnabled;
 	};
 	
+#if PLATFORM(IPHONE)
+#ifndef __OBJC__
+	class NSSet;
+	class UITouch;
+	class UIEvent;
+#endif
+#endif
+	
 	///-------------------------------------------------------------------------------------------------------------------
 	class TouchDispatcher : public RefCounted<TouchDispatcher> {
 		typedef HashMap<unsigned, RefPtr<PlatformTouch> > PlatformTouchMap;
@@ -275,18 +288,18 @@ namespace Aphid {
 		static TouchDispatcher* sharedDispatcher();
 		
 		//Handle touches
-#ifdef __OBJC__		
+#if PLATFORM(IPHONE)	
 		void handleUITouches(NSSet* ts, UIEvent* event, EventFlag flag);
 		
 		PlatformTouch* mapTouch(UITouch* touch);
 		PassRefPtr<PlatformTouch> unmapTouch(UITouch* touch);
 		PlatformTouchEvent* toPlatformTouchEvent(UIEvent* event);
-#else
-		void handleUITouches(void* ts, void* event, EventFlag flag);
-		
-		PlatformTouch* mapTouch(void* touch);
-		PassRefPtr<PlatformTouch> unmapTouch(void* touch);
-		PlatformTouchEvent* toPlatformTouchEvent(void* event);
+#elif PLATFORM(ANDROID)
+		void handleAndroidSingleTouch(JNIEnv* env, int eventHash, long eventTime, EventFlag flag, jobject jtouch);
+		PlatformTouchEvent* toPlatformTouchEvent(int eventHash, long eventTime);
+		PlatformTouch* mapTouch(JNIEnv* env, jobject jtouch);
+		PassRefPtr<PlatformTouch> unmapTouch(JNIEnv* env, jobject jtouch);
+		PassRefPtr<PlatformTouch> toPlatformTouch(JNIEnv* env, jobject jtouch);
 #endif
 		
 		void markTouchObjects(AJ::MarkStack& markStack, unsigned markID);
@@ -299,6 +312,7 @@ namespace Aphid {
 		void dispatchMultiTouches(const PlatformTouchVector& touches, PlatformTouchEvent* event, EventFlag flag);
 		
 		PlatformTouchMap m_touchMap;
+
 		RefPtr<PlatformTouchEvent> m_touchEvent; //TODO: may need a map??
 	};
 }
