@@ -21,35 +21,44 @@ limitations under the License.
 #include <wtf/FastAllocBase.h>
 #include <wtf/Noncopyable.h>
 
-namespace AJ {
-	class UString;
-}
-
+#if PLATFORM(IPHONE)
 #ifdef __OBJC__
 @class UIColor;
 @class UIView;
 @class UILabel;
 #endif
+#endif
 
 namespace Aphid {
+
+#if PLATFORM(IPHONE)
 #ifndef __OBJC__
 	class NSString;
 	class UIColor;
 	class UIView;
 	class UILabel;
 #endif
+#endif
+	
+	class String;
 	
 	class Diagnostic : public Noncopyable {
 	public:
+#if PLATFORM(IPHONE)
 		static void error(NSString* message, bool logInConsole=true);
 		static void warn(NSString* message, bool logInConsole=true);
-		static void error(const AJ::UString& message, bool logInConsole=true);
-		static void warn(const AJ::UString& message, bool logInConsole=true);
-		
 		static void displayNotification(UIColor* color, NSString* message, float expireSeconds=3);
+#endif
+		
+		static void error(const String& message, bool logInConsole=true);
+		static void warn(const String& message, bool logInConsole=true);
+		static void info(const String& message, bool logInConsole=true);
+		
 	private:
+#if PLATFORM(IPHONE)
 		static UILabel* s_notification_view;
 		static double s_hide_time;
+#endif
 	};
 }
 

@@ -49,7 +49,7 @@ namespace Aphid {
 			UString errorMessage = exception.toString(exec);
 			exec->clearException();
 			
-			Diagnostic::error(formatUString("[%s:%d] JS Exception: %s", exceptionURL.UTF8String().data(), lineNO, errorMessage.UTF8String().data()));
+			Diagnostic::error(String::format("[%s:%d] JS Exception: %s", exceptionURL.UTF8String().data(), lineNO, errorMessage.UTF8String().data()));
 		} else 
 			oa_debug("Not an exception object");
 	}
@@ -210,7 +210,7 @@ namespace Aphid {
 		else {
 			CodeBlock* codeBlock = exec->codeBlock();
 			const UString& sourceURL = codeBlock->ownerExecutable()->sourceURL();
-			Diagnostic::warn(formatUString("Invalid access to readonly property '%s' of '%s' in %s", propertyName.ustring().ascii(), className.ascii(), sourceURL.ascii()));
+			Diagnostic::warn(String::format("Invalid access to readonly property '%s' of '%s' in %s", propertyName.ustring().ascii(), className.ascii(), sourceURL.ascii()));
 		}
 			
 	}

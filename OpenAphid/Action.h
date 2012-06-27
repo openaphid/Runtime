@@ -87,21 +87,6 @@ namespace Aphid {
 		virtual const AJ::ClassInfo* wrapperClassInfo() const;
 		virtual AJ::AJObject* createWrapper(AJ::ExecState* exec, AJOAGlobalObject* globalObject);
 		
-	protected:		
-	  Action();
-		
-		void dispatchUpdateToAction(Action* action, TimeSec t)
-		{
-			if (action) {
-				if (action->supportsReversedTime() && isTimeReversed())
-					action->handleUpdate(1 - t);
-				else
-					action->handleUpdate(t);
-			}
-		}
-		
-		virtual Action* doCreateClone() = 0;
-		virtual Action* doCreateReverse() = 0;
 		virtual void postSetupClone(Action* cloned)
 		{
 			UNUSED_PARAM(cloned);
@@ -120,6 +105,23 @@ namespace Aphid {
 			else
 				update(t);
 		}
+		
+	protected:		
+	  Action();
+		
+		void dispatchUpdateToAction(Action* action, TimeSec t)
+		{
+			if (action) {
+				if (action->supportsReversedTime() && isTimeReversed())
+					action->handleUpdate(1 - t);
+				else
+					action->handleUpdate(t);
+			}
+		}
+		
+		virtual Action* doCreateClone() = 0;
+		virtual Action* doCreateReverse() = 0;
+		
 		
 	  Node* m_originalTarget;
 	  Node* m_target;

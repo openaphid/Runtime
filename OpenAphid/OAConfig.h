@@ -25,7 +25,7 @@ limitations under the License.
 #define OA_TARGET_IOS 1
 #define OA_TARGET_ANDROID 0
 
-#if DEBUG
+#ifndef NDEBUG
 #define OA_DEV 1
 #else
 #define OA_DEV 0

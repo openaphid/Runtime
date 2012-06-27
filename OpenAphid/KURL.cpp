@@ -1662,6 +1662,8 @@ namespace Aphid {
 		  if (toASCIILower(url[i]) != protocol[i])
 			  return false;
 	  }
+	  
+	  return true;
   }
 
   bool protocolIsAJ(const String& url)

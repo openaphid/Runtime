@@ -52,7 +52,7 @@ namespace ATF {
 }
 
 namespace Aphid {
-	class Aphid::String;
+	class String;
 	class TextCodec;
 	
 	const UChar blackSquare = 0x25A0;

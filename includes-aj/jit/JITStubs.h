@@ -160,7 +160,7 @@ namespace AJ {
         void* reserved; // Unused
         JITStubArg args[6];
 #if USE(JSVALUE32_64)
-        void* padding[2]; // Maintain 16-byte stack alignment.
+        void* padding[1]; // Maintain 16-byte stack alignment.
 #endif
 
         ReturnAddressPtr thunkReturnAddress;

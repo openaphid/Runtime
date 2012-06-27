@@ -161,7 +161,7 @@ namespace Aphid {
 			  else if (value.isNumber())
 				  setNumber(identifier.ascii(), value.toNumber(exec));
 		  } else
-			  Diagnostic::warn(formatUString("Incorrect config key: %s", identifier.ascii()));
+			  Diagnostic::warn(String::format("Incorrect config key: %s", identifier.ascii()));
 	  }
   }
 
@@ -596,7 +596,7 @@ namespace Aphid {
 			  if (m_emitterMode == kCCParticleModeGravity) {
 				  Point tmp, radial, tangential;
 
-				  radial = CGPointZero;
+				  radial = PointZero;
 				  // radial acceleration
 				  if (p->pos.x || p->pos.y)
 					  radial = PointNormalize(p->pos);
@@ -1213,10 +1213,10 @@ namespace Aphid {
 		glTexCoordPointer(2, GL_FLOAT, kQuadSize, (GLvoid*) offsetof(ccV2F_C4B_T2F,texCoords) );
 #else // vertex array list
 
-	  NSUInteger offset = (NSUInteger) quads_;
+	  unsigned offset = (unsigned) quads_;
 
 	  // vertex
-	  NSUInteger diff = offsetof( ccV2F_C4B_T2F, vertices);
+	  unsigned diff = offsetof( ccV2F_C4B_T2F, vertices);
 	  glVertexPointer(2, GL_FLOAT, kQuadSize, (GLvoid *) (offset + diff));
 
 	  // color

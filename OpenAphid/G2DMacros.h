@@ -25,7 +25,7 @@ limitations under the License.
 
 #include "G2DConfig.h"
 
-#import <OpenGLES/ES1/glext.h>
+#include "OpenGLES.inc.h"
 
 namespace Aphid {
 	static inline float G2D_CONTENT_SCALE_FACTOR() 

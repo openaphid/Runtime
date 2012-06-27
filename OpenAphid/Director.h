@@ -24,15 +24,17 @@ limitations under the License.
 
 #include "G2DConfig.h"
 #include "G2DProtocols.h"
-#include "ObjCObject.h"
 
 #include "Texture2D.h"
 
 #include "Node.h"
 #include "Scene.h"
 
+#if PLATFORM(IPHONE)
+#include "ObjCObject.h"
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
+#endif
 #endif
 
 namespace Aphid {
@@ -42,26 +44,29 @@ namespace Aphid {
 	class Node;
 	class DirectorIOS;
 	
-	typedef enum {
+	enum ccDirectorProjection{
 		/// sets a 2D projection (orthogonal projection).
-		kCCDirectorProjection2D,
+		kCCDirectorProjection2D = 1,
 		
 		/// sets a 3D projection with a fovy=60, znear=0.5f and zfar=1500.
-		kCCDirectorProjection3D,
+		kCCDirectorProjection3D = 2,
 		
 		/// it calls "updateProjection" on the projection delegate.
-		kCCDirectorProjectionCustom,
+		kCCDirectorProjectionCustom = 3,
 		
 		/// Detault projection is 3D projection
 		kCCDirectorProjectionDefault = kCCDirectorProjection3D,
 		
+		/*
 		// backward compatibility stuff
 		CCDirectorProjection2D = kCCDirectorProjection2D,
 		CCDirectorProjection3D = kCCDirectorProjection3D,
 		CCDirectorProjectionCustom = kCCDirectorProjectionCustom,
+		*/
 		
-	} ccDirectorProjection;
+	};
 	
+#if PLATFORM(IPHONE)
 #ifdef __OBJC__
 	typedef enum {
 		/// Device oriented vertically, home button on the bottom
@@ -84,6 +89,18 @@ namespace Aphid {
 		/// Device oriented horizontally, home button on the left
     kCCDeviceOrientationLandscapeRight = 4, //UIDeviceOrientationLandscapeRight,
 	} ccDeviceOrientation;
+#endif //__OBJC__
+#else
+	enum ccDeviceOrientation{
+		/// Device oriented vertically, home button on the bottom
+		kCCDeviceOrientationPortrait = 1, //UIDeviceOrientationPortrait,	
+		/// Device oriented vertically, home button on the top
+    kCCDeviceOrientationPortraitUpsideDown = 2, //UIDeviceOrientationPortraitUpsideDown,
+		/// Device oriented horizontally, home button on the right
+    kCCDeviceOrientationLandscapeLeft = 3, //UIDeviceOrientationLandscapeLeft,
+		/// Device oriented horizontally, home button on the left
+    kCCDeviceOrientationLandscapeRight = 4, //UIDeviceOrientationLandscapeRight,
+	} ;
 #endif
 	
 	
@@ -149,23 +166,31 @@ namespace Aphid {
 		
 		static float s_fps_interval;
 		
-		virtual void drawScene() = 0;
-		virtual void setProjection(ccDirectorProjection p) = 0;
+		virtual void drawScene();
+		virtual void setProjection(ccDirectorProjection p);
+		
+#if PLATFORM(IPHONE)
 #ifdef __OBJC__
 		virtual void setGLView(id glView);
 #else
 		virtual void setGLView(void* glView);
 #endif
+#endif
+		
+#if PLATFORM(ANDROID)
+		virtual void setSurfaceSize(int width, int height) = 0;
+#endif
+		
 		virtual void reshapeProjection(const Size& windowSize);
-		virtual Point convertToGL(const Point& p) = 0;
-		virtual Point convertToUI(const Point& p) = 0;
-		virtual Size winSize() const {return m_winSizeInPoints;}
-		virtual Size winSizeInPixels() const {return m_winSizeInPixels;}
+		virtual Point convertToGL(const Point& p);
+		virtual Point convertToUI(const Point& p);
+		virtual Size winSize() const;
+		virtual Size winSizeInPixels() const;
 		virtual void end();
 		virtual void startAnimation() = 0;
 		virtual void stopAnimation() = 0;
 		virtual void setAnimationInterval(double interval) = 0;
-		virtual void avoidLayoutFlicker() = 0;
+		virtual void avoidLayoutFlicker() {}
 		
 		Point uiPointInNode(const Point& p, Node* node)
 		{
@@ -186,24 +211,24 @@ namespace Aphid {
 		void pause();
 		void resume();
 		
-		//iOS
-		virtual void applyOrientation() = 0;
+		virtual void applyOrientation();
 		virtual void setDeviceOrientation(ccDeviceOrientation orientation) = 0;
-		virtual ccDeviceOrientation deviceOrientation() const = 0;
-		virtual void setContentScaleFactor(float scaleFactor) = 0;
-		virtual float contentScaleFactor() = 0;
+		virtual ccDeviceOrientation deviceOrientation() const {return m_deviceOrientation;}
+		virtual void setContentScaleFactor(float scaleFactor);
+		virtual float contentScaleFactor();
 		virtual bool enableRetinaDisplay(bool on) = 0;
 		virtual bool multipleTouchEnabled() const = 0;
 		virtual void setMultipleTouchEnabled(bool b) = 0;
 
 		//Getters and setters
-		
+#if PLATFORM(IPHONE)
 #ifdef __OBJC__
 		NSThread* runningThread() const {return m_runningThread;}
 		id glView() const {return m_glView->impl();}
 #else
 		void* runningThread() const {return m_runningThread;}
 		void* glView() const {return m_glView->impl();}
+#endif
 #endif
 		
 		Scene* runningScene() const {return m_runningScene.get();}
@@ -245,7 +270,26 @@ namespace Aphid {
 		void setDepthTest(bool on);
 		
 	protected:
+#if PLATFORM(IPHONE)
 		RefPtr<ObjCObject> m_glView;
+		
+#ifdef __OBJC__
+		NSThread* m_runningThread;
+#else
+		void* m_runningThread;
+#endif
+		
+		// profiler
+#if CC_ENABLE_PROFILERS
+		ccTime accumDtForProfiler_;
+#endif		
+		//iOS
+
+#endif //PLATFORM(IPHONE)
+		
+		ccDeviceOrientation m_deviceOrientation;
+		bool m_contentScaleSupported;
+		
 		double m_animationInterval;
 		double m_oldAnimationInterval;	
 		
@@ -297,79 +341,8 @@ namespace Aphid {
 		Size	m_winSizeInPixels;
 		
 		RefPtr<Texture2D> m_fpsTexture;
-		
-		/* the cocos2d running thread */
-#ifdef __OBJC__
-		NSThread* m_runningThread;
-#else
-		void* m_runningThread;
-#endif
-		
-		// profiler
-#if CC_ENABLE_PROFILERS
-		ccTime accumDtForProfiler_;
-#endif		
-		//iOS
-		
 	}; // class Director
 	
-	class DirectorIOS : public Director {
-		typedef Director Base;
-	public:
-		virtual ~DirectorIOS();
-		
-		static PassRefPtr<DirectorIOS> create()
-		{
-			return adoptRef(new DirectorIOS());
-		}
-		
-		virtual void drawScene();
-		virtual void setProjection(ccDirectorProjection projection);
-		
-#ifdef __OBJC__
-		virtual void setGLView(id view);
-#else
-		virtual void setGLView(void* view);
-#endif
-		
-		virtual void applyOrientation();
-		virtual void setDeviceOrientation(ccDeviceOrientation orientation);
-		virtual ccDeviceOrientation deviceOrientation() const {return m_deviceOrientation;}
-		virtual void setContentScaleFactor(float scaleFactor);
-		virtual float contentScaleFactor();
-		virtual bool enableRetinaDisplay(bool on);
-		virtual void reshapeProjection(const Size& windowSize);
-		virtual Point convertToGL(const Point& p);
-		virtual Point convertToUI(const Point& p);
-		virtual Size winSize() const;
-		virtual Size winSizeInPixels() const;
-		virtual bool multipleTouchEnabled() const;
-		virtual void setMultipleTouchEnabled(bool b);
-		virtual void end();
-		virtual void startAnimation();
-		virtual void stopAnimation();
-		virtual void setAnimationInterval(double interval);
-		virtual void avoidLayoutFlicker();
-		
-		virtual DirectorIOS* toDirectorIOS() {return this;}
-		
-	protected:
-		DirectorIOS();
-		void updateContentScaleFactor();
-		
-	private:		
-		ccDeviceOrientation m_deviceOrientation;
-		bool m_contentScaleSupported;
-		
-#ifdef __OBJC__
-		id m_displayLink;
-		id m_bridge;
-#else
-		void* m_displayLink;
-		void* m_bridge;
-#endif
-	};
-
 }// namespace Aphid
 
 #endif

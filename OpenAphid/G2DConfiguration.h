@@ -47,6 +47,7 @@ limitations under the License.
 #include "ccTypes.h"
 
 namespace Aphid {
+#if PLATFORM(IPHONE)
 	enum {
 		kCCiOSVersion_3_0   = 0x03000000,
 		kCCiOSVersion_3_1   = 0x03010000,
@@ -68,15 +69,57 @@ namespace Aphid {
 		kCCMacVersion_10_6  = 0x0a060000,
 		kCCMacVersion_10_7  = 0x0a070000,
 	};
+#elif PLATFORM(ANDROID)
+	//TODO
+#else
+#error Unsupported platform
+#endif
+
+	class AtomicString;
 	
 	class G2DConfiguration {
 	public:
-		static GLint maxTextureSize();
-		static GLint maxModelviewStackDepth();
-		static bool supportsNPOT();
-		static bool supportsPVRTC();
-		static bool supportsBGRA8888();
-		static bool supportsDiscardFramebuffer();
+		static GLint maxTextureSize()
+		{
+			if (!s_inited)
+				initConfiguration();
+			return s_maxTextureSize;
+		}
+
+		static GLint maxModelviewStackDepth()
+		{
+			if (!s_inited)
+				initConfiguration();
+			return s_maxModelviewStackDepth;
+		}
+
+		static bool supportsNPOT()
+		{
+			if (!s_inited)
+				initConfiguration();
+			return s_supportsNPOT;
+		}
+
+		static bool supportsPVRTC()
+		{
+			if (!s_inited)
+				initConfiguration();
+			return s_supportsPVRTC;
+		}
+
+		static bool supportsBGRA8888()
+		{
+			if (!s_inited)
+				initConfiguration();
+			return s_supportsBGRA8888;
+		}
+
+		static bool supportsDiscardFramebuffer()
+		{
+			if (!s_inited)
+				initConfiguration();
+			return s_supportsDiscardFramebuffer;
+		}
 		
 		static bool checkForGLExtension(const char* searchName);
 		
@@ -89,6 +132,7 @@ namespace Aphid {
 		static unsigned int s_OSVersion;
 		static GLint s_maxSamplesAllowed;
 		static char* s_glExtensions;
+		static AtomicString s_glExtensionsString;
 	};
 }
 

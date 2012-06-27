@@ -45,9 +45,11 @@ namespace Aphid {
   OAGlobalObject::OAGlobalObject()
   {
 	  LEAK_DETECT_INC("OAGlobalObject");
+	  /*
 	  m_heapStats.lastTime = mach_absolute_time();
 	  m_heapStats.stats.size = 0;
 	  m_heapStats.stats.free = 0;
+	  */
   }
 
   OAGlobalObject::~OAGlobalObject()
@@ -60,11 +62,19 @@ namespace Aphid {
   RefPtr<OAGlobalObject> OAGlobalObject::s_shared_instance = 0;
   bool OAGlobalObject::s_destroyed = false;
 
+  void OAGlobalObject::createInstance()
+  {
+  	ASSERT(!s_shared_instance);
+  	
+  	s_destroyed = false;
+  	s_shared_instance = adoptRef(new OAGlobalObject());
+  }
+	
   OAGlobalObject *OAGlobalObject::sharedInstance()
   {
 	  if (!s_destroyed) {
 	  if (!s_shared_instance)
-		  s_shared_instance = adoptRef(new OAGlobalObject());
+				createInstance();
 
 	  return s_shared_instance.get();
 		} else
