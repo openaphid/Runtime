@@ -45,19 +45,17 @@ namespace Aphid {
 	
 	bool DirectorAndroid::enableRetinaDisplay(bool on)
 	{
-		OA_TODO();
 		return false;
 	}
 	
 	bool DirectorAndroid::multipleTouchEnabled() const
 	{
-		OA_TODO();
-		return false;
+		return JNI::callStaticMethod<jboolean>(JNI::getJNIEnv(), JNI::Cache::s_appdelegate_jclass->global(), JNI::Cache::s_appdelegate_jmethod_isMultitouchEnabled) == JNI_TRUE ? true : false;
 	}
 	
 	void DirectorAndroid::setMultipleTouchEnabled(bool on)
 	{
-		OA_TODO();
+		JNI::callStaticVoidMethod(JNI::getJNIEnv(), JNI::Cache::s_appdelegate_jclass->global(), JNI::Cache::s_appdelegate_jmethod_setMultitouchEnabled, on ? JNI_TRUE : JNI_FALSE);
 	}
 	
 	void DirectorAndroid::startAnimation()
@@ -72,7 +70,7 @@ namespace Aphid {
 	
 	void DirectorAndroid::setAnimationInterval(double interval)
 	{
-		JNI::callStaticMethod(JNI::getJNIEnv(), JNI::Cache::s_appdelegate_jclass->global(), JNI::Cache::s_appdelegate_jmethod_setFrameInterval, interval);
+		JNI::callStaticVoidMethod(JNI::getJNIEnv(), JNI::Cache::s_appdelegate_jclass->global(), JNI::Cache::s_appdelegate_jmethod_setFrameInterval, interval);
 	}
 	
 	void DirectorAndroid::setSurfaceSize(int width, int height)

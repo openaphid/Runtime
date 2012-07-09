@@ -29,7 +29,7 @@ namespace Aphid {
 	{
 		JNIEnv* env = JNI::getJNIEnv();
 
-		JNI::callStaticMethod(env, Cache::s_diagnostic_jclass->global(), Cache::s_diagnostic_jmethod_error,
+		JNI::callStaticVoidMethod(env, Cache::s_diagnostic_jclass->global(), Cache::s_diagnostic_jmethod_error,
 				JNI::toJNIString(env, message)->local(), logInConsole ? JNI_TRUE : JNI_FALSE);
 	}
 
@@ -37,7 +37,7 @@ namespace Aphid {
 	{
 		JNIEnv* env = JNI::getJNIEnv();
 
-		JNI::callStaticMethod(env, Cache::s_diagnostic_jclass->global(), Cache::s_diagnostic_jmethod_warn,
+		JNI::callStaticVoidMethod(env, Cache::s_diagnostic_jclass->global(), Cache::s_diagnostic_jmethod_warn,
 				JNI::toJNIString(env, message)->local(), logInConsole ? JNI_TRUE : JNI_FALSE);
 	}
 
@@ -45,13 +45,7 @@ namespace Aphid {
 	{
 		JNIEnv* env = JNI::getJNIEnv();
 
-		jstring string = env->NewStringUTF(message.utf8().data());
-
-		CHECK_JNI_EXCEPTION(env);
-
-		ASSERT(string);
-
-		JNI::callStaticMethod(env, Cache::s_diagnostic_jclass->global(), Cache::s_diagnostic_jmethod_info,
+		JNI::callStaticVoidMethod(env, Cache::s_diagnostic_jclass->global(), Cache::s_diagnostic_jmethod_info,
 				JNI::toJNIString(env, message)->local(), logInConsole ? JNI_TRUE : JNI_FALSE);
 	}
 }

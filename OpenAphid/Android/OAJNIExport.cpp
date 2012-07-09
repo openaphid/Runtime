@@ -96,10 +96,19 @@ JNIEXPORT jboolean JNICALL Java_org_openaphid_gl_AphidRenderer_nativeEvaluateScr
 }
 
 
-JNIEXPORT void JNICALL Java_org_openaphid_gl_AphidRenderer_nativeOnSingleTouch
-  (JNIEnv *env, jobject, jint eventHash, jlong eventTime, jint phase, jobject jtouch)
+JNIEXPORT void JNICALL Java_org_openaphid_gl_AphidRenderer_nativeOnTouch
+  (JNIEnv *env, jobject, jobject jtouch)
 {
-	TouchDispatcher::sharedDispatcher()->handleAndroidSingleTouch(env, eventHash, eventTime, (EventFlag)phase, jtouch);
+	TouchDispatcher::sharedDispatcher()->handleAndroidTouchEvent(env, jtouch);
+}
+
+JNIEXPORT void JNICALL Java_org_openaphid_gl_AphidRenderer_nativeBindJavaObject
+  (JNIEnv * env, jobject, jstring jname, jobject jbinder, jboolean androidOnly)
+{
+	if (Aphid::s_oa_script_bridge)
+		s_oa_script_bridge->setScriptBinding(env, jname, jbinder, androidOnly);
+	else
+		oa_error("Can't bing Java object, ScriptBridge is NULL");
 }
 
 ///---------------------------------------------------------------------------------------------------------------------

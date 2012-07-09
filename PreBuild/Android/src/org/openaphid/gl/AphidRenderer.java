@@ -24,6 +24,7 @@ import java.util.concurrent.FutureTask;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import org.openaphid.internal.AphidJSBinder;
 import org.openaphid.internal.AppDelegate;
 import org.openaphid.internal.utils.AphidLog;
 
@@ -33,7 +34,7 @@ public class AphidRenderer implements GLSurfaceView.Renderer {
 
 	private final LinkedList<Runnable> eventQueue = new LinkedList<Runnable>();
 
-	private final AphidTouchQueue touchQueue = new AphidTouchQueue();
+	private final AphidTouchEventQueue touchQueue = new AphidTouchEventQueue();
 
 	private boolean surfaceAlive = false;
 
@@ -77,7 +78,7 @@ public class AphidRenderer implements GLSurfaceView.Renderer {
 
 		if (surfaceAlive) {
 
-			touchQueue.processAllTouches(this);
+			touchQueue.processAllTouchesInGLThread(this);
 
 			nativeOnDrawFrame();
 
@@ -115,8 +116,19 @@ public class AphidRenderer implements GLSurfaceView.Renderer {
 		}
 	}
 
-	public void handleSingleTouch(final AphidTouch touch) {
-		touchQueue.queueTouch(touch);
+	public void handleTouchEvent(AphidTouchEvent touch) {
+		touchQueue.queueTouchInMainThread(touch);
+	}
+	
+	public void setScriptBinding(String name, Object bindingObject, final boolean androidOnly) {
+		final AphidJSBinder binder = AphidJSBinder.createBinder(name, bindingObject);
+		if (name != null && bindingObject != null) {
+			post(new Runnable() {
+				public void run() {
+					nativeBindJavaObject(binder.getBindingName(), binder, androidOnly);
+				}
+			});
+		}
 	}
 
 	public void evaluateScriptFile(final String filename) {
@@ -136,7 +148,9 @@ public class AphidRenderer implements GLSurfaceView.Renderer {
 
 	private native void nativeOnSurfaceDestroyed();
 
-	native void nativeOnSingleTouch(int eventHash, long eventTime, int phase, AphidTouch touch);
+	native void nativeOnTouch(AphidTouchEvent touch);
 
 	private native boolean nativeEvaluateScriptFile(String filename);
+	
+	private native void nativeBindJavaObject(String name, AphidJSBinder binder, boolean androidOnly);
 }
