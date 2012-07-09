@@ -17,11 +17,16 @@ limitations under the License.
 package org.openaphid.internal.utils;
 
 import java.util.HashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
+
+import org.openaphid.internal.AppDelegate;
 
 import android.graphics.*;
 import android.os.Looper;
 import android.text.*;
 import android.text.TextUtils.TruncateAt;
+import android.util.FloatMath;
 
 public class UI {
 	public static final int ALIGNMENT_LEFT = 0;
@@ -40,6 +45,21 @@ public class UI {
 	public static boolean isMainThread() {
 		return Looper.myLooper() == Looper.getMainLooper();
 	}
+	
+	public static void assertInMainThread() {
+		if (!isMainThread())
+			throw new RuntimeException("Main thread assertion failed");
+	}
+	
+	public static <T> T callInMainThread(Callable<T> call) throws Exception {
+		if (isMainThread())
+			return call.call();
+		else {
+			FutureTask<T> task = new FutureTask<T>(call);
+			AppDelegate.getHandler().post(task);
+			return task.get();
+		}
+	}
 
 	public static Typeface getTypeface(String fontname) {
 		Typeface typeface = typeface_cache.get(fontname);
@@ -52,6 +72,7 @@ public class UI {
 
 	private static final TextPaint shared_text_paint = new TextPaint();
 
+	@AphidNativeExposed
 	public static Bitmap stringToBitmap(String text, String fontName, float fontSize, int width, int height,
 			int alignment, int lineBreakMode) {
 
@@ -104,7 +125,7 @@ public class UI {
 				break;
 		}
 
-		int measuredWidth = width == 0 ? (int) Math.ceil(shared_text_paint.measureText(text)) : width;
+		int measuredWidth = width == 0 ? (int) FloatMath.ceil(shared_text_paint.measureText(text)) : width;
 
 		//TODO: find a way to reuse layout
 		StaticLayout layout = new StaticLayout(text, 0, text.length(), shared_text_paint, measuredWidth, layoutAlignment,

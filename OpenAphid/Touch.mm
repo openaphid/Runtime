@@ -23,7 +23,7 @@ limitations under the License.
 #import <UIKit/UIView.h>
 
 namespace Aphid {
-		
+	
 	
 	///-------------------------------------------------------------------------------------------------------------------
 	/// TouchDispatcher
@@ -31,7 +31,8 @@ namespace Aphid {
 	{
 		return (unsigned)(t * 1000.0);
 	}
-	
+
+	//TODO should handle touch.phase
 	PlatformTouch* TouchDispatcher::mapTouch(UITouch *touch)
 	{
 		Director* director = Director::sharedDirector();

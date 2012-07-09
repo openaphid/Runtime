@@ -28,7 +28,11 @@ limitations under the License.
 #include "NamespaceCore.h"
 #include "NamespaceG2D.h"
 #include "NamespaceActions.h"
+#if PLATFORM(IPHONE)
 #include "NamespaceiOS.h"
+#elif PLATFORM(ANDROID)
+#include "NamespaceAndroid.h"
+#endif
 #include "NamespaceExt.h"
 
 #include "OAConfig.h"
@@ -67,14 +71,22 @@ namespace Aphid {
 		NamespaceActions* namespaceActions() const;
 		NamespaceActions* optNamespaceActions() const {return m_namespaceActions.get();}
 		
+		NamespaceExt* namespaceExt() const;
+		NamespaceExt* optNamespaceExt() const {return m_namespaceExt.get();}
+
+#if PLATFORM(IPHONE)
 		NamespaceiOS* namespaceiOS() const;
 		NamespaceiOS* optNamespaceiOS() const {return m_namespaceiOS.get();}
 		
-		NamespaceExt* namespaceExt() const;
-		NamespaceExt* optNamespaceExt() const {return m_namespaceExt.get();}
+		NamespaceExt* namespaceExtiOS() const;
+		NamespaceExt* optNamespaceExtiOS() const {return m_namespaceExtiOS.get();}
+#elif PLATFORM(ANDROID)
+		NamespaceAndroid* namespaceAndroid() const;
+		NamespaceAndroid* optNamespaceAndroid() const {return m_namespaceAndroid.get();}
 		
-		NamespaceExt* namespaceExtIOS() const;
-		NamespaceExt* optNamespaceExtIOS() const {return m_namespaceExtIOS.get();}
+		NamespaceExt* namespaceExtAndroid() const;
+		NamespaceExt* optNamespaceExtAndroid() const {return m_namespaceExtAndroid.get();}
+#endif
 		
 		bool garbageCollection();
 		
@@ -100,9 +112,15 @@ namespace Aphid {
 		mutable RefPtr<NamespaceCore> m_namespaceCore;
 		mutable RefPtr<NamespaceJS> m_namespaceJS;
 		mutable RefPtr<NamespaceActions> m_namespaceActions;
-		mutable RefPtr<NamespaceiOS> m_namespaceiOS;
 		mutable RefPtr<NamespaceExt> m_namespaceExt;
-		mutable RefPtr<NamespaceExt> m_namespaceExtIOS;
+		
+#if PLATFORM(IPHONE)
+		mutable RefPtr<NamespaceiOS> m_namespaceiOS;
+		mutable RefPtr<NamespaceExt> m_namespaceExtiOS;
+#elif PLATFORM(ANDROID)
+		mutable RefPtr<NamespaceAndroid> m_namespaceAndroid;
+		mutable RefPtr<NamespaceExt> m_namespaceExtAndroid;
+#endif
 		
 		HeapStatistic m_heapStats; //TODO, placeholder for future GC tuning
 	}; // class OAGlobalObject

@@ -19,6 +19,8 @@ limitations under the License.
 #include <wtf/RefCounted.h>
 #include <wtf/text/WTFString.h>
 
+#include <jni.h>
+
 namespace Aphid {
 	class AJOAGlobalObject;
 	
@@ -38,6 +40,8 @@ namespace Aphid {
 		bool evaluateScriptFile(const String& filename);
 		
 		bool evaluateScriptString(const String& script, const String& source, int repeat=1);
+		
+		void setScriptBinding(JNIEnv* env, jstring jname, jobject jbinder, jboolean androidOnly);
 		
 	private:
 		AJOAGlobalObject * _globalObject;

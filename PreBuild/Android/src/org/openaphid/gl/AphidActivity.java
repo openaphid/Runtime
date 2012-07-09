@@ -48,6 +48,10 @@ public class AphidActivity extends Activity {
 
 		glSurfaceView.requestFocus();
 		glSurfaceView.setFocusableInTouchMode(true);
+		
+		//Setup Java to JavaScript binding here
+		//For example:
+		//  glSurfaceView.getAphidRenderer().setScriptBinding("test1", new BindingTest1(), false);
 
 		glSurfaceView.getAphidRenderer().evaluateScriptFile("tank.js");
 	}

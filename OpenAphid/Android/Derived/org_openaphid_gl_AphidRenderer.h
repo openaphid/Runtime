@@ -41,11 +41,11 @@ JNIEXPORT void JNICALL Java_org_openaphid_gl_AphidRenderer_nativeOnSurfaceDestro
 
 /*
  * Class:     org_openaphid_gl_AphidRenderer
- * Method:    nativeOnSingleTouch
- * Signature: (IJILorg/openaphid/gl/AphidTouch;)V
+ * Method:    nativeOnTouch
+ * Signature: (Lorg/openaphid/gl/AphidTouchEvent;)V
  */
-JNIEXPORT void JNICALL Java_org_openaphid_gl_AphidRenderer_nativeOnSingleTouch
-  (JNIEnv *, jobject, jint, jlong, jint, jobject);
+JNIEXPORT void JNICALL Java_org_openaphid_gl_AphidRenderer_nativeOnTouch
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     org_openaphid_gl_AphidRenderer
@@ -54,6 +54,14 @@ JNIEXPORT void JNICALL Java_org_openaphid_gl_AphidRenderer_nativeOnSingleTouch
  */
 JNIEXPORT jboolean JNICALL Java_org_openaphid_gl_AphidRenderer_nativeEvaluateScriptFile
   (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_openaphid_gl_AphidRenderer
+ * Method:    nativeBindJavaObject
+ * Signature: (Ljava/lang/String;Lorg/openaphid/internal/AphidJSBinder;Z)V
+ */
+JNIEXPORT void JNICALL Java_org_openaphid_gl_AphidRenderer_nativeBindJavaObject
+  (JNIEnv *, jobject, jstring, jobject, jboolean);
 
 #ifdef __cplusplus
 }

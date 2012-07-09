@@ -26,7 +26,7 @@ limitations under the License.
 #include "Node.h"
 
 namespace Aphid {
-  ///-------------------------------------------------------------------------------------------------------------------
+	///-------------------------------------------------------------------------------------------------------------------
 	/// PlatformTouch
 	PlatformTouch::PlatformTouch()
 	: m_screenLocation(PointZero)
@@ -100,6 +100,16 @@ namespace Aphid {
 		}
 		
 		return false;			
+	}
+	
+	bool PlatformTouchEvent::removeTouchAtIndex(unsigned index)
+	{
+		if (m_allTouches.size() > index) {
+			m_allTouches.remove(index);
+			return true;
+		}
+		
+		return false;
 	}
 	
 	PassRefPtr<TouchEvent> PlatformTouchEvent::toTouchEvent(EventFlag flag)
@@ -332,7 +342,7 @@ namespace Aphid {
 				ASSERT(entry->find(touch) == ATF::notFound);
 				entry->append(touch);
 			}
-}
+		}
 		
 		for (TargetTouchesMap::iterator it = map.begin(); it != map.end(); ++it) {
 			TouchEventTarget* target = it->first;
@@ -347,8 +357,10 @@ namespace Aphid {
 	
 	void TouchDispatcher::markTouchObjects(AJ::MarkStack &markStack, unsigned int markID)
 	{
+#if PLATFORM(IPHONE)
 		if (m_touchEvent)
 			m_touchEvent->markTouchObjects(markStack, markID);
+#endif
 		for (PlatformTouchMap::iterator it = m_touchMap.begin(); it != m_touchMap.end(); ++it) {
 			it->second->markTouchObjects(markStack, markID);
 		}

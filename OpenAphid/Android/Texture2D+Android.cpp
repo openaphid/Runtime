@@ -38,7 +38,7 @@ namespace Aphid {
 		
 		if (bitmap->local()) {
 			texture->initWithBitmap(bitmap->local());		
-			JNI::callMethod(JNI::getJNIEnv(), bitmap->local(), JNI::Cache::s_bitmap_jmethod_recycle);
+			JNI::callVoidMethod(JNI::getJNIEnv(), bitmap->local(), JNI::Cache::s_bitmap_jmethod_recycle);
 		}
 		return texture.release();
 	}
@@ -70,7 +70,7 @@ namespace Aphid {
 		
 		if (bitmap->local()) {
 			texture->initWithBitmap(bitmap->local());		
-			JNI::callMethod(JNI::getJNIEnv(), bitmap->local(), JNI::Cache::s_bitmap_jmethod_recycle);
+			JNI::callVoidMethod(JNI::getJNIEnv(), bitmap->local(), JNI::Cache::s_bitmap_jmethod_recycle);
 		}
 		return texture.release();
 	}

@@ -26,6 +26,7 @@
 #include <wtf/OwnPtr.h>
 #include <wtf/ByteArray.h>
 #include <wtf/text/WTFString.h>
+#include <runtime/UString.h>
 #include "OAUtil.h"
 
 namespace Aphid {
@@ -80,7 +81,7 @@ namespace Aphid {
 			return ret;
 		}
 		
-		static void callMethod(JNIEnv* env, jobject obj, jmethodID method, ...)
+		static void callVoidMethod(JNIEnv* env, jobject obj, jmethodID method, ...)
 		{
 			va_list args;
 
@@ -107,7 +108,7 @@ namespace Aphid {
 			return ret;
 		}
 
-		static void callStaticMethod(JNIEnv* env, jclass klass, jmethodID method, ...)
+		static void callStaticVoidMethod(JNIEnv* env, jclass klass, jmethodID method, ...)
 		{
 			va_list args;
 
@@ -133,8 +134,6 @@ namespace Aphid {
 			//NOTES: caller should gurantee to pass a local reference of jobject; no extra checking is applied as there is no stable API to distinguish global and local reference
 			static PassOwnPtr<LocalRef<T> > create(JNIEnv* env, T localObject)
 			{
-				//if (!localObject)
-				//	return 0; //TODO: is it really a good idea to return 0 here?
 				OwnPtr<LocalRef<T> > ptr(new LocalRef<T>(env, localObject));
 				return ptr.release();
 			}
@@ -219,7 +218,10 @@ namespace Aphid {
 		typedef GlobalRef<jstring> GlobalString;
 		typedef GlobalRef<jclass> GlobalClass;
 
+		PassOwnPtr<LocalString> toJNIString(JNIEnv* env, const char* string);
 		PassOwnPtr<LocalString> toJNIString(JNIEnv* env, const String& string);
+		PassOwnPtr<LocalString> toJNIString(JNIEnv* env, const AJ::UString& string);
+		
 		String toString(JNIEnv* env, const LocalObject* localObject);
 		String toString(JNIEnv* env, jstring str);
 
@@ -238,8 +240,12 @@ namespace Aphid {
 			{
 			}
 			
+			static RefPtr<GlobalClass> s_object_jclass;
+			
 			static RefPtr<JNI::GlobalClass> s_appdelegate_jclass;
 			static jmethodID s_appdelegate_jmethod_setFrameInterval;
+			static jmethodID s_appdelegate_jmethod_isMultitouchEnabled;
+			static jmethodID s_appdelegate_jmethod_setMultitouchEnabled;
 
 			//Diagnostic related
 			static RefPtr<JNI::GlobalClass> s_diagnostic_jclass;
@@ -257,12 +263,55 @@ namespace Aphid {
 			static RefPtr<JNI::GlobalClass> s_ui_jclass;
 			static jmethodID s_ui_jmethod_stringToBitmap;
 			
-			static jmethodID s_aphidtouch_jmethod_getIdentifier;
-			static jmethodID s_aphidtouch_jmethod_getScreenX;
-			static jmethodID s_aphidtouch_jmethod_getScreenY;
-			static jmethodID s_aphidtouch_jmethod_getClientX;
-			static jmethodID s_aphidtouch_jmethod_getClientY;
-			static jmethodID s_aphidtouch_jmethod_getTimestamp;
+			static jmethodID s_aphidtouchevent_jmethod_getEventIdentifier;
+			static jmethodID s_aphidtouchevent_jmethod_getEventTime;
+			static jmethodID s_aphidtouchevent_jmethod_getEventPhase;
+			static jmethodID s_aphidtouchevent_jmethod_getIds;
+			static jmethodID s_aphidtouchevent_jmethod_getScreenXs;
+			static jmethodID s_aphidtouchevent_jmethod_getScreenYs;
+			static jmethodID s_aphidtouchevent_jmethod_getClientXs;
+			static jmethodID s_aphidtouchevent_jmethod_getClientYs;
+			static jmethodID s_aphidtouchevent_jmethod_getTouchCount;
+			static jmethodID s_aphidtouchevent_jmethod_getActionIndex;
+			
+			static RefPtr<GlobalClass> s_aphidjsbinder_jclass;
+			static RefPtr<GlobalObject> s_aphidjsbinder_error_return;
+			static jmethodID s_aphidjsbinder_jmethod_reapondsToFunction;
+			static jmethodID s_aphidjsbinder_jmethod_listFunctionNames;
+			static jmethodID s_aphidjsbinder_jmethod_getParameterTypeSignature;
+			static jmethodID s_aphidjsbinder_jmethod_getReturnTypeSignature;
+			static jmethodID s_aphidjsbinder_jmethod_toBoolean;
+			static jmethodID s_aphidjsbinder_jmethod_toByte;
+			static jmethodID s_aphidjsbinder_jmethod_toChar_int;
+			static jmethodID s_aphidjsbinder_jmethod_toChar_String;
+			static jmethodID s_aphidjsbinder_jmethod_toShort;
+			static jmethodID s_aphidjsbinder_jmethod_toInteger;
+			static jmethodID s_aphidjsbinder_jmethod_toLong;
+			static jmethodID s_aphidjsbinder_jmethod_toFloat;
+			static jmethodID s_aphidjsbinder_jmethod_toDouble;
+			static jmethodID s_aphidjsbinder_jmethod_invokeMethod;
+			static jmethodID s_aphidjsbinder_jmethod_getBoolean;
+			static jmethodID s_aphidjsbinder_jmethod_getInt;
+			static jmethodID s_aphidjsbinder_jmethod_getFloat;
+			static jmethodID s_aphidjsbinder_jmethod_getDouble;
+			static jmethodID s_aphidjsbinder_s_jmethod_getObjectTypeSignature;
+			static jmethodID s_aphidjsbinder_s_jmethod_getKeyIterator;
+			
+			static RefPtr<GlobalClass> s_arraylist_jclass;
+			static jmethodID s_arraylist_jmethod_constructor_int;
+			static jmethodID s_list_jmethod_add;
+			static jmethodID s_list_jmethod_size;
+			static jmethodID s_list_jmethod_get;
+			
+			static RefPtr<GlobalClass> s_hashmap_jclass;
+			static jmethodID s_hashmap_jmethod_constructor_int;
+			static jmethodID s_map_jmethod_put;
+			static jmethodID s_map_jmethod_get;
+			
+			static jmethodID s_iterator_jmethod_hasNext;
+			static jmethodID s_iterator_jmethod_next;
+			
+			static RefPtr<GlobalClass> s_string_jclass;
 			
 			static void initialize(JNIEnv* env);
 

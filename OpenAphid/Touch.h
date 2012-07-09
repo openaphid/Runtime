@@ -69,6 +69,7 @@ namespace Aphid {
 		unsigned identifier() const {return m_id;}
 		void setIdentifier(unsigned i) {m_id = i;}
 		
+		//TODO: remove timestamp later, it's not a part of w3c specification
 		unsigned timestamp() const {return m_timestamp;}
 		void setTimestamp(unsigned t) {m_timestamp = t;}
 		
@@ -223,6 +224,7 @@ namespace Aphid {
 		
 		bool addTouch(PassRefPtr<PlatformTouch> touch);
 		bool removeTouch(PlatformTouch* touch);
+		bool removeTouchAtIndex(unsigned index);
 		
 		RefPtr<TouchEventTarget> m_target;
 		PlatformTouchVector m_allTouches;
@@ -295,11 +297,8 @@ namespace Aphid {
 		PassRefPtr<PlatformTouch> unmapTouch(UITouch* touch);
 		PlatformTouchEvent* toPlatformTouchEvent(UIEvent* event);
 #elif PLATFORM(ANDROID)
-		void handleAndroidSingleTouch(JNIEnv* env, int eventHash, long eventTime, EventFlag flag, jobject jtouch);
-		PlatformTouchEvent* toPlatformTouchEvent(int eventHash, long eventTime);
-		PlatformTouch* mapTouch(JNIEnv* env, jobject jtouch);
-		PassRefPtr<PlatformTouch> unmapTouch(JNIEnv* env, jobject jtouch);
-		PassRefPtr<PlatformTouch> toPlatformTouch(JNIEnv* env, jobject jtouch);
+		void handleAndroidTouchEvent(JNIEnv* env, jobject jtouchEvent);
+		PassRefPtr<PlatformTouchEvent> toPlatformTouchEvent(JNIEnv* env, jobject jtouchEvent);
 #endif
 		
 		void markTouchObjects(AJ::MarkStack& markStack, unsigned markID);
@@ -313,7 +312,9 @@ namespace Aphid {
 		
 		PlatformTouchMap m_touchMap;
 
+#if PLATFORM(IPHONE)
 		RefPtr<PlatformTouchEvent> m_touchEvent; //TODO: may need a map??
+#endif
 	};
 }
 

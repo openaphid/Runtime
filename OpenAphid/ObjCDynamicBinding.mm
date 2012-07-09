@@ -349,7 +349,7 @@ namespace Aphid {
 						oa_error("Invalid arg type in native function: %s", type);
 						ASSERT_NOT_REACHED();
 					}
-				}
+				} //end of for loop
 				
 				if (!exec->hadException()) {
 					AJValue retValue = jsUndefined();
@@ -371,23 +371,23 @@ retValue = jsNumber(exec, v); \
 						
 						GET_RETURN_NUMBER(char)
 						else GET_RETURN_NUMBER(int)
-							else GET_RETURN_NUMBER(short)
-								else GET_RETURN_NUMBER(long)
-									else GET_RETURN_NUMBER(long long)
-										else GET_RETURN_NUMBER(unsigned char)
-											else GET_RETURN_NUMBER(unsigned int)
-												else GET_RETURN_NUMBER(unsigned short)
-													else GET_RETURN_NUMBER(unsigned long)
-														else GET_RETURN_NUMBER(unsigned long long)
-															else GET_RETURN_NUMBER(float)
-																else GET_RETURN_NUMBER(double)
-																	else if (strcmp(type, @encode(id)) == 0) {
-																		id v = nil;
-																		[invocation getReturnValue:&v];
-																		retValue = convertToAJ(exec, globalObject, v);
-																	} else {
-																		oa_error("Invalid return type encoding: %s", type);
-																	}
+						else GET_RETURN_NUMBER(short)
+						else GET_RETURN_NUMBER(long)
+						else GET_RETURN_NUMBER(long long)
+						else GET_RETURN_NUMBER(unsigned char)
+						else GET_RETURN_NUMBER(unsigned int)
+						else GET_RETURN_NUMBER(unsigned short)
+						else GET_RETURN_NUMBER(unsigned long)
+						else GET_RETURN_NUMBER(unsigned long long)
+						else GET_RETURN_NUMBER(float)
+						else GET_RETURN_NUMBER(double)
+						else if (strcmp(type, @encode(id)) == 0) {
+							id v = nil;
+							[invocation getReturnValue:&v];
+							retValue = convertToAJ(exec, globalObject, v);
+						} else {
+							oa_error("Invalid return type encoding: %s", type);
+						}
 						
 						return retValue;
 						

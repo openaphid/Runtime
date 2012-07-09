@@ -18,6 +18,7 @@ package org.openaphid.gl;
 
 import java.util.concurrent.Callable;
 
+import org.openaphid.internal.AppDelegate;
 import org.openaphid.internal.utils.AphidLog;
 import org.openaphid.internal.utils.UI;
 
@@ -36,9 +37,9 @@ public class AphidGLSurfaceView extends GLSurfaceView {
 
 	private AphidRenderer renderer = null;
 
-	private boolean multipleTouchEnabled = false;
-
 	private int[] location = { 0, 0 };
+	
+	private int previousSingleTouchID = -1;
 
 	public AphidGLSurfaceView(Context context) {
 		super(context);
@@ -59,45 +60,96 @@ public class AphidGLSurfaceView extends GLSurfaceView {
 		return renderer;
 	}
 
-	public boolean isMultipleTouchEnabled() {
-		return multipleTouchEnabled;
-	}
-
 	@Override
 	public boolean onTouchEvent(final MotionEvent event) {
+		if (AppDelegate.isMultitouchEnabled()) {
+			if (handleMultiTouchEvent(event))
+				return true;
+		} else {
+			if (handleSingleTouchEvent(event))
+				return true;
+		}
+		return super.onTouchEvent(event);
+	}
 
+	private boolean handleSingleTouchEvent(MotionEvent event) {
 		final int phase;
-
+		int index = 0;
 		switch (event.getActionMasked()) {
 			case MotionEvent.ACTION_DOWN:
 				phase = EventFlagTouchStart;
+				previousSingleTouchID = event.getPointerId(0);
+				index = 0;
 				break;
 			case MotionEvent.ACTION_MOVE:
 				phase = EventFlagTouchMove;
+				index = event.findPointerIndex(previousSingleTouchID);
 				break;
 			case MotionEvent.ACTION_UP:
 				phase = EventFlagTouchEnd;
+				index = event.findPointerIndex(previousSingleTouchID);
+				previousSingleTouchID = -1;
 				break;
 			case MotionEvent.ACTION_CANCEL:
 				phase = EventFlagTouchCancel;
+				index = event.findPointerIndex(previousSingleTouchID);
+				previousSingleTouchID = -1;
+				break;
+			case MotionEvent.ACTION_POINTER_UP:
+				index = event.getActionIndex();
+				if (event.getPointerId(index) == previousSingleTouchID) {
+					phase = EventFlagTouchEnd;
+					previousSingleTouchID = -1;
+				} else 
+					phase = -1;
 				break;
 			default:
-				//TODO: handle multitouch actions
 				AphidLog.d("Unknown action of MotionEvent: %d", event.getAction());
 				phase = -1;
 				break;
 		}
 
-		if (phase >= 0) {
-			int eventHash = System.identityHashCode(event);
-			long eventTime = event.getEventTime();
+		if (phase >= 0 && index >= 0) {
 			getLocationOnScreen(location);
-			AphidTouch touch = AphidTouch.create(location, event, eventHash, eventTime, phase, 0);//TODO handle multiple touches			
-			renderer.handleSingleTouch(touch);
+			AphidTouchEvent touch = AphidTouchEvent.createSingleTouchEvent(location, event, phase, index);
+			renderer.handleTouchEvent(touch);
 			return true;
 		}
 
-		return super.onTouchEvent(event);
+		return false;
+	}
+	
+	private boolean handleMultiTouchEvent(MotionEvent event) {
+		final int phase;
+		
+		switch(event.getActionMasked()) {
+			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_POINTER_DOWN:
+				phase = EventFlagTouchStart;
+				break;
+			case MotionEvent.ACTION_MOVE:
+				phase = EventFlagTouchMove;
+				break;
+			case MotionEvent.ACTION_CANCEL:
+				phase = EventFlagTouchCancel;
+				break;
+			case MotionEvent.ACTION_UP:
+			case MotionEvent.ACTION_POINTER_UP:
+				phase = EventFlagTouchEnd;
+				break;
+			default:
+				AphidLog.d("Unknown multitouch action of MotionEvent: %d", event.getAction());
+				phase = -1;
+				break;
+		}
+		
+		if (phase >= 0) {
+			getLocationOnScreen(location);
+			AphidTouchEvent touchEvent = AphidTouchEvent.createMultiTouchEvent(location, event, phase);
+			renderer.handleTouchEvent(touchEvent);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
