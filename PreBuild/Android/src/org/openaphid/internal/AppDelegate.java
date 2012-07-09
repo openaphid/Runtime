@@ -19,14 +19,18 @@ package org.openaphid.internal;
 import java.net.URL;
 
 import org.openaphid.gl.AphidActivity;
+import org.openaphid.internal.utils.AphidNativeExposed;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Handler;
 
+@AphidNativeExposed
 public class AppDelegate {
-	private static boolean develop_mode = true;
+	public static final String VERSION_STRING = "OpenAphid Android v0.1.5";
+	
+	private static boolean developer_mode = true;
 
 	private static URL base_url = null;
 
@@ -39,18 +43,20 @@ public class AppDelegate {
 	private static Handler shared_handler = null;
 
 	private static double frame_interval = 1.0 / 60;
+	
+	private static boolean multitouch_enabled = false;
 
 	public static Handler getHandler() {
 		return shared_handler;
 	}
 
-	public static void initialize(AphidActivity activity, URL baseURL, String gameBundleName, boolean developMode) {
+	public static void initialize(AphidActivity activity, URL baseURL, String gameBundleName, boolean developerMode) {
 		aphid_activity = activity;
 		application_context = activity.getApplicationContext();
 		shared_handler = new Handler();
 
 		base_url = baseURL;
-		develop_mode = developMode;
+		developer_mode = developerMode;
 		game_bundle = new AssetsBundle(gameBundleName);
 	}
 
@@ -59,7 +65,7 @@ public class AppDelegate {
 	}
 
 	public static void initializeNativeEngine() {
-		nativeInitialize(develop_mode, base_url != null ? base_url.toExternalForm() : null);
+		nativeInitialize(developer_mode, base_url != null ? base_url.toExternalForm() : null);
 	}
 
 	public static Context getApplicationContext() {
@@ -74,12 +80,13 @@ public class AppDelegate {
 		return application_context.getResources().getAssets();
 	}
 
+	@AphidNativeExposed
 	public static AssetsBundle getGameBundle() {
 		return game_bundle;
 	}
 
-	public static boolean isDevelopMode() {
-		return develop_mode;
+	public static boolean isDeveloperMode() {
+		return developer_mode;
 	}
 
 	public static URL getBaseURL() {
@@ -90,8 +97,19 @@ public class AppDelegate {
 		return frame_interval;
 	}
 
+	@AphidNativeExposed
 	public static void setFrameInterval(double frame_interval) {
 		AppDelegate.frame_interval = frame_interval;
+	}
+	
+	@AphidNativeExposed
+	public static boolean isMultitouchEnabled() {
+		return multitouch_enabled;
+	}
+	
+	@AphidNativeExposed
+	public static void setMultitouchEnabled(boolean multipleTouchEnabled) {
+		multitouch_enabled = multipleTouchEnabled;
 	}
 
 	public static void destroyAphidActivity() {

@@ -29,9 +29,14 @@ limitations under the License.
 //referred
 #include "AJNamespaceCore.h"
 #include "AJNamespaceG2D.h"
-#include "AJNamespaceiOS.h"
 #include "AJNamespaceJS.h"
 #include "AJNamespaceExt.h"
+#if PLATFORM(IPHONE)
+#include "AJNamespaceiOS.h"
+#endif
+#if PLATFORM(ANDROID)
+#include "AJNamespaceAndroid.h"
+#endif
 //end
 
 #include "OAGlobalObject.h"
@@ -94,11 +99,21 @@ namespace Aphid {
 		return toAJ(exec, jsNamespaceAphid->globalObject(), jsNamespaceAphid->globalObject()->impl()->namespaceJS());
 	}
 	
+#if PLATFORM(IPHONE)
 	AJ::AJValue ajNamespaceAphidIos(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&)
 	{
 		AJNamespaceAphid* jsNamespaceAphid = ajoa_cast<AJNamespaceAphid*>(asObject(thisValue));
 		return toAJ(exec, jsNamespaceAphid->globalObject(), jsNamespaceAphid->globalObject()->impl()->namespaceiOS());
 	}
+#endif
+
+#if PLATFORM(ANDROID)
+	AJ::AJValue ajNamespaceAphidAndroid(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&) 
+	{
+		AJNamespaceAphid* jsNamespaceAphid = ajoa_cast<AJNamespaceAphid*>(asObject(thisValue));
+		return toAJ(exec, jsNamespaceAphid->globalObject(), jsNamespaceAphid->globalObject()->impl()->namespaceAndroid());
+	}
+#endif
 
 	AJ::AJValue ajNamespaceAphidExt(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&)
 	{
@@ -106,10 +121,21 @@ namespace Aphid {
 		return toAJ(exec, jsNamespaceAphid->globalObject(), jsNamespaceAphid->globalObject()->impl()->namespaceExt());
 	}
 	
+#if PLATFORM(IPHONE)
 	AJ::AJValue ajNamespaceAphidExtios(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&)
 	{
 		AJNamespaceAphid* jsNamespaceAphid = ajoa_cast<AJNamespaceAphid*>(asObject(thisValue));
 		return toAJ(exec, jsNamespaceAphid->globalObject(), jsNamespaceAphid->globalObject()->impl()->namespaceExtIOS());
 	}
+#endif
+
+#if PLATFORM(ANDROID)
+	AJ::AJValue ajNamespaceAphidExtandroid(AJ::ExecState* exec, AJ::AJValue thisValue, const AJ::Identifier&) 
+	{
+		AJNamespaceAphid* jsNamespaceAphid = ajoa_cast<AJNamespaceAphid*>(asObject(thisValue));
+		return toAJ(exec, jsNamespaceAphid->globalObject(), jsNamespaceAphid->globalObject()->impl()->namespaceExtAndroid());
+	}
+
+#endif
 
 }

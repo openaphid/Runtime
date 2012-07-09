@@ -39,6 +39,9 @@
 #include "ResourceManager.h"
 
 #include "OAJNIUtil.h"
+#include "DynamicBinding+Android.h"
+#include "AJDynamicBinding.h"
+#include "AJNamespaceExt.h"
 
 using namespace AJ;
 
@@ -174,5 +177,21 @@ namespace Aphid {
 		}
 
 		return false;
+	}
+	
+	void ScriptBridge::setScriptBinding(JNIEnv* env, jstring jname, jobject jbinder, jboolean androidOnly)
+	{
+		String name = JNI::toString(env, jname);
+		RefPtr<JavaDynamicBinding> binding = JavaDynamicBinding::create(name.utf8().data(), JNI::GlobalObject::create(env, jbinder));
+		ExecState* exec = _globalObject->globalExec();
+		AJLock lock(exec);
+		AJNamespaceExt* ajNamespaceExt;
+		if (androidOnly)
+			ajNamespaceExt = ajoa_cast<AJNamespaceExt*>(asObject(toAJ(exec, _globalObject, _globalObject->impl()->namespaceExtAndroid())));
+		else
+			ajNamespaceExt = ajoa_cast<AJNamespaceExt*>(asObject(toAJ(exec, _globalObject, _globalObject->impl()->namespaceExt())));
+		AJDynamicBinding* ajBinding = ajoa_cast<AJDynamicBinding*>(asObject(toAJ(exec, _globalObject, binding.get())));
+		ajNamespaceExt->putDirect(Identifier(exec, toUString(name)), ajBinding, ReadOnly | DontDelete);
+		ASSERT(!exec->hadException());
 	}
 }

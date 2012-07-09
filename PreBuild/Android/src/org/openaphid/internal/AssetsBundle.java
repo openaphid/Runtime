@@ -117,9 +117,10 @@ public class AssetsBundle {
 		}
 	}
 
+	@AphidNativeExposed
 	public String loadString(String name) {
 		String string = null;
-		if (AppDelegate.isDevelopMode() && AppDelegate.getBaseURL() != null) {
+		if (AppDelegate.isDeveloperMode() && AppDelegate.getBaseURL() != null) {
 			URL url = Net.newURL(name);
 			AphidLog.i("(develop mode) loading string '%s' from remote: %s", name, url);
 			string = IO.readString(Net.openInput(url));
@@ -132,9 +133,10 @@ public class AssetsBundle {
 		return string;
 	}
 
+	@AphidNativeExposed
 	public byte[] loadData(String name, boolean supressLogging) {
 		byte[] data = null;
-		if (AppDelegate.isDevelopMode() && AppDelegate.getBaseURL() != null) {
+		if (AppDelegate.isDeveloperMode() && AppDelegate.getBaseURL() != null) {
 			URL url = Net.newURL(name);
 			AphidLog.i("(develop mode) loading data '%s' from remote: %s", name, url);
 			data = IO.readData(Net.openInput(url));
@@ -146,9 +148,10 @@ public class AssetsBundle {
 		return data;
 	}
 
+	@AphidNativeExposed
 	public Bitmap loadBitmap(String name) {
 		Bitmap bm = null;
-		if (AppDelegate.isDevelopMode() && AppDelegate.getBaseURL() != null) {
+		if (AppDelegate.isDeveloperMode() && AppDelegate.getBaseURL() != null) {
 			URL url = Net.newURL(name);
 			AphidLog.i("(develop mode) loading bitmap '%s' from remote: %s", name, url);
 			bm = IO.readBitmap(Net.openInput(url));

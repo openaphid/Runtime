@@ -31,8 +31,12 @@ limitations under the License.
 #include "AJNamespaceJS.h"
 #include "AJNamespaceActions.h"
 #include "AJConsole.h"
-#include "AJNamespaceiOS.h"
 #include "AJNamespaceExt.h"
+#if PLATFORM(IPHONE)
+#include "AJNamespaceiOS.h"
+#elif PLATFORM(ANDROID)
+#include "AJNamespaceAndroid.h"
+#endif
 
 #include "AJOABinding.h"
 
@@ -124,12 +128,7 @@ namespace Aphid {
 	  return m_namespaceActions.get();
   }
 
-  NamespaceiOS *OAGlobalObject::namespaceiOS() const
-  {
-	  if (!m_namespaceiOS)
-		  m_namespaceiOS = NamespaceiOS::create();
-	  return m_namespaceiOS.get();
-  }
+  
 
 	NamespaceExt* OAGlobalObject::namespaceExt() const
 	{
@@ -138,12 +137,35 @@ namespace Aphid {
 		return m_namespaceExt.get();
 	}
 	
-	NamespaceExt* OAGlobalObject::namespaceExtIOS() const
+#if PLATFORM(IPHONE)
+	NamespaceiOS *OAGlobalObject::namespaceiOS() const
+  {
+	  if (!m_namespaceiOS)
+		  m_namespaceiOS = NamespaceiOS::create();
+	  return m_namespaceiOS.get();
+  }
+	
+	NamespaceExt* OAGlobalObject::namespaceExtiOS() const
 	{
 		if (!m_namespaceExtIOS)
 			m_namespaceExtIOS = NamespaceExt::create();
-		return m_namespaceExtIOS.get();
+		return m_namespaceExtiOS.get();
 	}
+#elif PLATFORM(ANDROID)
+	NamespaceAndroid *OAGlobalObject::namespaceAndroid() const
+  {
+	  if (!m_namespaceAndroid)
+		  m_namespaceAndroid = NamespaceAndroid::create();
+	  return m_namespaceAndroid.get();
+  }
+	
+	NamespaceExt* OAGlobalObject::namespaceExtAndroid() const
+	{
+		if (!m_namespaceExtAndroid)
+			m_namespaceExtAndroid = NamespaceExt::create();
+		return m_namespaceExtAndroid.get();
+	}
+#endif
 	
   bool OAGlobalObject::s_explicit_gc = false;
 
@@ -178,7 +200,12 @@ namespace Aphid {
 	  markDirectWrapper(optNamespaceJS(), markStack, markID);
 	  markDirectWrapper(optNamespaceActions(), markStack, markID);
 		markDirectWrapper(optNamespaceExt(), markStack, markID);
-		markDirectWrapper(optNamespaceExtIOS(), markStack, markID);
+#if PLATFORM(IPHONE)
+		markDirectWrapper(optNamespaceExtiOS(), markStack, markID);
+#endif
+#if PLATFORM(ANDROID)
+		markDirectWrapper(optNamespaceExtAndroid(), markStack, markID);
+#endif
 
 	  markDirectWrapper(optConsole(), markStack, markID);
 

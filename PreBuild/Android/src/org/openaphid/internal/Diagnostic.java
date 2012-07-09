@@ -16,13 +16,13 @@ limitations under the License.
 
 package org.openaphid.internal;
 
-import org.openaphid.internal.utils.AphidLog;
-import org.openaphid.internal.utils.UI;
+import org.openaphid.internal.utils.*;
 
 import android.graphics.Color;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@AphidNativeExposed
 public class Diagnostic {
 	private Diagnostic() {
 	}
@@ -33,11 +33,12 @@ public class Diagnostic {
 		error(message, true);
 	}
 
+	@AphidNativeExposed
 	public static void error(String message, boolean logInConsole) {
 		if (message != null) {
 			if (logInConsole)
 				AphidLog.e("(OpenAphid Diagnostic) Error, " + message);
-			if (AppDelegate.isDevelopMode())
+			if (AppDelegate.isDeveloperMode())
 				displayNotification(Color.RED, message, false);
 		}
 	}
@@ -46,11 +47,12 @@ public class Diagnostic {
 		warn(message, true);
 	}
 
+	@AphidNativeExposed
 	public static void warn(String message, boolean logInConsole) {
 		if (message != null) {
 			if (logInConsole)
 				AphidLog.w("(OpenAphid Diagnostic) Warning, " + message);
-			if (AppDelegate.isDevelopMode())
+			if (AppDelegate.isDeveloperMode())
 				displayNotification(Color.BLUE, message, false);
 		}
 	}
@@ -59,11 +61,12 @@ public class Diagnostic {
 		info(message, true);
 	}
 
+	@AphidNativeExposed
 	public static void info(String message, boolean logInConsole) {
 		if (message != null) {
 			if (logInConsole)
 				AphidLog.i("(OpenAphid Diagnostic) Info, " + message);
-			if (AppDelegate.isDevelopMode())
+			if (AppDelegate.isDeveloperMode())
 				displayNotification(INFO_COLOR, message, true);
 		}
 	}

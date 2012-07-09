@@ -19,121 +19,131 @@
 #include "Touch.h"
 #include "Director.h"
 #include "AJEventListener.h"
+#include "OAJNIUtil.h"
 
 namespace Aphid {
-	PlatformTouchEvent* TouchDispatcher::toPlatformTouchEvent(int eventHash, long eventTime)
-	{
-		if (!m_touchEvent || m_touchEvent->identifier() != eventHash) {
-			oa_debug("new motion event: %p", eventHash);
-			m_touchEvent = PlatformTouchEvent::create();
-			m_touchEvent->setIdentifier(eventHash);
-		}
-		return m_touchEvent.get();
-	}
+	using JNI::Cache;
 
-	PassRefPtr<PlatformTouch> TouchDispatcher::toPlatformTouch(JNIEnv* env, jobject jtouch)
+	PassRefPtr<PlatformTouchEvent> TouchDispatcher::toPlatformTouchEvent(JNIEnv* env, jobject jtouchEvent)
 	{
 		Director* director = Director::sharedDirector();
 		ASSERT(director);
 
-		unsigned identifier = JNI::callMethod<jint>(env, jtouch, JNI::Cache::s_aphidtouch_jmethod_getIdentifier);
-		RefPtr<PlatformTouch> ret = PlatformTouch::create();
-		ret->setIdentifier(identifier);
+		RefPtr<PlatformTouchEvent> ret = PlatformTouchEvent::create();
+		ret->setIdentifier(JNI::callMethod<jint>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getEventIdentifier));
+		ret->setTimestamp(JNI::callMethod<jlong>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getEventTime));
 
-		ret->setScreenLocation(
-				director->convertToGL(
-						PointMake(
-								JNI::callMethod<jfloat>(env, jtouch, JNI::Cache::s_aphidtouch_jmethod_getScreenX),
-								JNI::callMethod<jfloat>(env, jtouch, JNI::Cache::s_aphidtouch_jmethod_getScreenY)
-										)
-										)
-										);
+		int count = JNI::callMethod<jint>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getTouchCount);
 
-		ret->setClientLocation(
-				director->convertToGL(
-						PointMake(
-								JNI::callMethod<jfloat>(env, jtouch, JNI::Cache::s_aphidtouch_jmethod_getClientX),
-								JNI::callMethod<jfloat>(env, jtouch, JNI::Cache::s_aphidtouch_jmethod_getClientY)
-										)
-										)
-										);
+		jintArray jids = (jintArray) JNI::callMethod<jobject>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getIds);
+		jfloatArray jscreenXs =
+				(jfloatArray) JNI::callMethod<jobject>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getScreenXs);
+		jfloatArray jscreenYs =
+				(jfloatArray) JNI::callMethod<jobject>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getScreenYs);
+		jfloatArray jclientXs =
+				(jfloatArray) JNI::callMethod<jobject>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getClientXs);
+		jfloatArray jclientYs =
+				(jfloatArray) JNI::callMethod<jobject>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getClientYs);
 
-		ret->setTimestamp(JNI::callMethod<jint>(env, jtouch, JNI::Cache::s_aphidtouch_jmethod_getTimestamp));
+		jint* jptrIds = env->GetIntArrayElements(jids, 0);
+		jfloat* jptrScreenXs = env->GetFloatArrayElements(jscreenXs, 0);
+		jfloat* jptrScreenYs = env->GetFloatArrayElements(jscreenYs, 0);
+		jfloat* jptrClientXs = env->GetFloatArrayElements(jclientXs, 0);
+		jfloat* jptrClientYs = env->GetFloatArrayElements(jclientYs, 0);
 
-		return ret.release();		
-	}
+		for (int i = 0; i < count; i++) {
+			int id = jptrIds[i];
+			ASSERT(id > 0);
 
-	PlatformTouch* TouchDispatcher::mapTouch(JNIEnv* env, jobject jtouch)
-	{
-		Director* director = Director::sharedDirector();
-		ASSERT(director);
-
-		PlatformTouch* ret = 0;
-		unsigned identifier = JNI::callMethod<jint>(env, jtouch, JNI::Cache::s_aphidtouch_jmethod_getIdentifier);
-
-		PlatformTouchMap::iterator it = m_touchMap.find(identifier);
-		if (it != m_touchMap.end())
-			ret = it->second.get();
-		else {
-			RefPtr<PlatformTouch> t = toPlatformTouch(env, jtouch);
-			m_touchMap.add(identifier, t);
-			ret = t.get();
+			RefPtr<PlatformTouch> touch = m_touchMap.get(id);
+			if (!touch) {
+				touch = PlatformTouch::create();
+				touch->setIdentifier(id);
+				m_touchMap.add(id, touch);
 		}
 
-		return ret;
+			//TODO: this is a grat opptunity to check moved touches
+			touch->setScreenLocation(
+					director->convertToGL(
+							PointMake(jptrScreenXs[i], jptrScreenYs[i])
+									)
+									);
+			touch->setClientLocation(
+					director->convertToGL(
+							PointMake(jptrClientXs[i], jptrClientYs[i])
+									)
+									);
+			ret->addTouch(touch);
 	}
 
-	PassRefPtr<PlatformTouch> TouchDispatcher::unmapTouch(JNIEnv* env, jobject jtouch)
-	{
-		unsigned identifier = JNI::callMethod<jint>(env, jtouch, JNI::Cache::s_aphidtouch_jmethod_getIdentifier);
-		PlatformTouchMap::iterator it = m_touchMap.find(identifier);
-		if (it != m_touchMap.end()) {
-			RefPtr<PlatformTouch> touch = it->second;
-			m_touchMap.remove(it);
-			return touch.release();
-		} else {
-			oa_debug("Failed to unmap touch: %d", identifier);
-			return toPlatformTouch(env, jtouch); //TODO: should be backported to iOS version
-		}
+		env->ReleaseIntArrayElements(jids, jptrIds, 0);
+		env->ReleaseFloatArrayElements(jscreenXs, jptrScreenXs, 0);
+		env->ReleaseFloatArrayElements(jscreenYs, jptrScreenYs, 0);
+		env->ReleaseFloatArrayElements(jclientXs, jptrClientXs, 0);
+		env->ReleaseFloatArrayElements(jclientYs, jptrClientYs, 0);
+		env->DeleteLocalRef(jids);
+		env->DeleteLocalRef(jscreenXs);
+		env->DeleteLocalRef(jscreenYs);
+		env->DeleteLocalRef(jclientXs);
+		env->DeleteLocalRef(jclientYs);
+		return ret.release();
 	}
 
-	void TouchDispatcher::handleAndroidSingleTouch(JNIEnv* env, int eventHash, long eventTime, EventFlag flag,
-			jobject jtouch)
+	void TouchDispatcher::handleAndroidTouchEvent(JNIEnv* env, jobject jtouchEvent)
 	{
 		Director* director = Director::sharedDirector();
 		if (!director)
 			return;
 
-		PlatformTouchEvent* platformEvent = toPlatformTouchEvent(eventHash, eventTime);
+		RefPtr<PlatformTouchEvent> platformEvent = toPlatformTouchEvent(env, jtouchEvent);
+		PlatformTouchVector changedTouches;
 
-		PlatformTouchVector touches;
+		const PlatformTouchVector& allTouches = platformEvent->allTouches();
 
-		if (flag == EventFlagTouchStart || flag == EventFlagTouchMove) {
-			PlatformTouch* touch = mapTouch(env, jtouch);
-			platformEvent->addTouch(touch);
-			touches.append(touch);
-		} else {
-			RefPtr<PlatformTouch> touch = unmapTouch(env, jtouch);
-			platformEvent->removeTouch(touch.get());
-			touches.append(touch.release());
-		}
+		int actionIndex = JNI::callMethod<jint>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getActionIndex);
+		
+		EventFlag phase =
+				(EventFlag) JNI::callMethod<jint>(env, jtouchEvent, Cache::s_aphidtouchevent_jmethod_getEventPhase);
 
-		if (flag == EventFlagTouchStart) {
+		switch (phase) {
+		case EventFlagTouchStart: {
+			RefPtr<PlatformTouch> touch = allTouches.at(actionIndex);
+			changedTouches.append(touch);
 			Scene* scene = director->runningScene();
 			if (scene) {
-				for (PlatformTouchVector::const_iterator it = touches.begin(); it != touches.end(); ++it) {
-					PlatformTouch* touch = it->get();
-					TouchEventTarget* target = scene->hitTest(scene->convertToNodeSpace(touch->clientLocation()), platformEvent);
+				TouchEventTarget* target = scene->hitTest(scene->convertToNodeSpace(touch->clientLocation()), platformEvent.get());
 					touch->setTarget(target);
 				}
 			}
+			break;
+		case EventFlagTouchMove:
+			changedTouches.append(allTouches); //TODO: should we compare the new event to the old one to compute a list of moved touches precisely?
+			break;
+		case EventFlagTouchEnd:
+		case EventFlagTouchCancel: {
+			RefPtr<PlatformTouch> t = allTouches.at(actionIndex);
+			changedTouches.append(t);
+			platformEvent->removeTouchAtIndex(actionIndex);
+			m_touchMap.remove(t->identifier());
+		}
+			break;
+		default:
+			oa_error("Invalid touch phase: %d", phase);
+			break;
 		}
 
-		TouchEventTarget* target = touches.at(0)->target();
+		if (director->multipleTouchEnabled())
+			dispatchMultiTouches(changedTouches, platformEvent.get(), phase);
+		else {
+			TouchEventTarget* target = changedTouches.at(0)->target();
 		if (target) {
 			platformEvent->setTarget(target);
-			target->handleTouchEvent(flag, touches, platformEvent);
+				target->handleTouchEvent(phase, changedTouches, platformEvent.get());
 			platformEvent->setTarget(0);
+			} else
+				oa_debug("no touch target");
 		}
-	}
-}
+		
+	}//end of TouchDispatcher::handleAndroidTouchEvent
+
+} //namespace Aphid
