@@ -331,6 +331,8 @@ namespace Aphid {
 						if (arg.isString()) {
 							OwnPtr<JNI::LocalString> jString = JNI::toJNIString(env, arg.toString(exec));
 							env->SetObjectArrayElement(jargs, i, jString->local());
+						} else if (arg.isUndefinedOrNull()) {
+							env->SetObjectArrayElement(jargs, i, 0);
 						} else {
 							OA_ERROR_INVALID_ARGUMENT(exec, formatUString("paramter_%d", i).UTF8String().data(), "String");
 							error = true;
@@ -342,6 +344,8 @@ namespace Aphid {
 							ASSERT(jList);
 							env->SetObjectArrayElement(jargs, i, jList);
 							env->DeleteLocalRef(jList);
+						} else if (arg.isUndefinedOrNull()) {
+							env->SetObjectArrayElement(jargs, i, 0);
 						} else {
 							OA_ERROR_INVALID_ARGUMENT(exec, formatUString("paramter_%d", i).UTF8String().data(), "array");
 							error = true;
@@ -353,6 +357,8 @@ namespace Aphid {
 							ASSERT(jMap);
 							env->SetObjectArrayElement(jargs, i, jMap);
 							env->DeleteLocalRef(jMap);
+						} else if (arg.isUndefinedOrNull()) {
+							env->SetObjectArrayElement(jargs, i, 0);
 						} else {
 							OA_ERROR_INVALID_ARGUMENT(exec, formatUString("paramter_%d", i).UTF8String().data(), "object");
 							error = true;
