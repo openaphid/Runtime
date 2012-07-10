@@ -1,3 +1,7 @@
+## Android v0.1.5_r1 (2012-07-09)
+
+- Fix incorrect handling of null value in binding APIs
+
 ## Android v0.1.5 (2012-07-08)
 
 - Support multitouch; enhanced event handling for single touch
