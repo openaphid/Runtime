@@ -1,7 +1,11 @@
+The project has been DISCONTINUED. Please refer to the blog post for more details.
+
+[http://openaphid.github.com/blog/2013/01/14/openaphid-engine-v0-dot-2-1f-and-discontinuation-announcement/](http://openaphid.github.com/blog/2013/01/14/openaphid-engine-v0-dot-2-1f-and-discontinuation-announcement/)
+
 Runtime
 =======
 
-The core runtime of OpenAphid
+The core runtime of OpenAphid-Engine, a fast 2D game engine for native iOS and Android games powered by JavaScript.
 
 ## System Requirement for iOS
 
@@ -15,7 +19,7 @@ The core runtime of OpenAphid
 
 - Android OS 2.2+
 
-- ARMv7 processor only, will support ARMv5 in future
+- ARMv7 processor only
 
 
 ## Copyright and License
