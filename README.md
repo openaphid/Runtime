@@ -6,6 +6,7 @@ Runtime
 =======
 
 The core runtime of OpenAphid-Engine, a fast 2D game engine for native iOS and Android games powered by JavaScript.
+[How to Choose a JavaScript Engine for iOS and Android Development](https://hubo.dev/2013-01-17-part-i-how-to-choose-a-javascript-engine-for-ios-and-android-apps/)
 
 ## System Requirement for iOS
 
